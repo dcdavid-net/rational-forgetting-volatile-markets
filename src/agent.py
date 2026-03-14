@@ -8,6 +8,7 @@ class Agent:
         self.spread = spread # static for now. Later in Phase 2, may have to make this variable
 
         self.memory = {}
+    
     def __repr__(self):
         return f"Agent({self.agent_id}, decay_rate={self.decay_rate}, prune_threshold={self.prune_threshold}, spread={self.spread})"
 
