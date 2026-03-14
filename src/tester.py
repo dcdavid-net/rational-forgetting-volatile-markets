@@ -258,10 +258,35 @@ if __name__ == '__main__':
     print('Test passed (highest and oldest Bid is removed from the order book).\n')
 
     print('###############################################################')
-    print('######################### market.py ###########################')
+    print('######################### agent.py ############################')
     print('###############################################################')
-    print('Testing Agent memory:')
-    print('Observed price should be in memory')
     agent = Agent(agent_id=9, decay_rate=0.5, prune_threshold=-10.0, spread=2.0)
+
+    print('Testing Agent memory:')
+    print('Initial agent should have no memory')
+    if verbose: print(agent.memory)
+    assert agent.memory == {}
+    print('Test passed.\n')
+
+    print('---------------------------------------------------------------')
+    print('Observed price should be in memory')
     agent.observe_price(price = 100, current_time=11)
-    
+    if verbose: print(agent.memory)
+    assert agent.memory == {100: [11]}
+    print('Test passed.\n')
+
+    print('---------------------------------------------------------------')
+    print('New observed price should insert a new price to memory')
+    agent.observe_price(price = 102, current_time=12)
+    if verbose: print(agent.memory)
+    assert agent.memory == {100: [11], 102: [12]}
+    print('Test passed.\n')
+
+    print('---------------------------------------------------------------')
+    print('Previously observed price should insert to the existing list')
+    agent.observe_price(price = 102, current_time=13)
+    if verbose: print(agent.memory)
+    assert agent.memory == {100: [11], 102: [12,13]}
+    print('Test passed.\n')
+
+    print('---------------------------------------------------------------')

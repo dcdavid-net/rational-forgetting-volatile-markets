@@ -74,7 +74,22 @@ Test passed (all the same Asks are still in the order book).
 Test passed (highest and oldest Bid is removed from the order book).
 
 ###############################################################
-######################### market.py ###########################
+######################### agent.py ############################
 ###############################################################
 Testing Agent memory:
+Initial agent should have no memory
+Test passed.
+
+---------------------------------------------------------------
 Observed price should be in memory
+Test passed.
+
+---------------------------------------------------------------
+New observed price should insert a new price to memory
+Test passed.
+
+---------------------------------------------------------------
+Previously observed price should insert to the existing list
+Test passed.
+
+---------------------------------------------------------------
