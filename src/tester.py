@@ -8,6 +8,7 @@ from scipy.stats import kurtosis
 from main import set_reproducibility_seed
 from src.generator import generate_fundamental_value
 from src.market import Order, Market
+from src.agent import Agent
 
 verbose = False
 
@@ -42,6 +43,8 @@ if __name__ == '__main__':
     sys.stderr = sys.stdout
 
     print('###############################################################')
+    print('########################### main.py ###########################')
+    print('###############################################################')
     print('Testing Reproducibility:')
     print('100 Iterations must be Equal (main.py)')
 
@@ -61,6 +64,8 @@ if __name__ == '__main__':
     print('Test passed.\n')
 
     print('###############################################################')
+    print('######################## generator.py #########################')
+    print('###############################################################')
     print('Testing Gaussian Random Walk:')
     print('100 Iterations must have Average Fisher Kurtosis ~ 0.0 ± 0.05')
     set_reproducibility_seed(0) # reset the seed
@@ -77,6 +82,8 @@ if __name__ == '__main__':
     assert -0.05 <= np.mean(fisher_kurtoses) <= 0.05
     print('Test passed.\n')
 
+    print('###############################################################')
+    print('######################### market.py ###########################')
     print('###############################################################')
     print('Testing Order Book timestamps:')
     print('First order placed should be lowest timestamp')
@@ -141,7 +148,7 @@ if __name__ == '__main__':
     executed_trade = market.submit_order(order_type='bid', agent_id=5, price=102)
     actual_executed_trade = (executed_trade[0]['buyer_id'], executed_trade[0]['seller_id'], executed_trade[0]['price'], executed_trade[0]['timestamp'])
     predicted_executed_trade = (5, 99, 102, 7)
-    if verbose: print(f'Executed trade {executed_trade}')
+    if verbose: print(actual_executed_trade, predicted_executed_trade)
     assert actual_executed_trade == predicted_executed_trade
     print('Test passed (executed trade).')
 
@@ -171,6 +178,7 @@ if __name__ == '__main__':
     executed_trade = market.submit_order(order_type='bid', agent_id=6, price=105)
     actual_executed_trade = (executed_trade[0]['buyer_id'], executed_trade[0]['seller_id'], executed_trade[0]['price'], executed_trade[0]['timestamp'])
     predicted_executed_trade = (6, 2, 102, 8)
+    if verbose: print(actual_executed_trade, predicted_executed_trade)
     assert actual_executed_trade == predicted_executed_trade
     print('Test passed (executed trade).')
 
@@ -226,7 +234,7 @@ if __name__ == '__main__':
     executed_trade = market.submit_order(order_type='ask', agent_id=8, price=98)
     actual_executed_trade = (executed_trade[0]['buyer_id'], executed_trade[0]['seller_id'], executed_trade[0]['price'], executed_trade[0]['timestamp'])
     predicted_executed_trade = (4, 8, 100, 10)
-    print(actual_executed_trade, predicted_executed_trade)
+    if verbose: print(actual_executed_trade, predicted_executed_trade)
     assert actual_executed_trade == predicted_executed_trade
     print('Test passed (executed trade).')
 
@@ -243,3 +251,12 @@ if __name__ == '__main__':
     if verbose: print(f'Bids: {market.bids}')
     prediction_vs_actual(market.bids, predicted_bid_values)
     print('Test passed (highest and oldest Bid is removed from the order book).\n')
+
+    print('###############################################################')
+    print('######################### market.py ###########################')
+    print('###############################################################')
+    print('Testing Agent memory:')
+    print('Observed price should be in memory')
+    agent = Agent(agent_id=9, decay_rate=0.5, prune_threshold=-10.0, spread=2.0)
+    agent.observe_price(price = 100, current_time=11)
+    

@@ -1,13 +1,19 @@
 ###############################################################
+########################### main.py ###########################
+###############################################################
 Testing Reproducibility:
 100 Iterations must be Equal (main.py)
 Test passed.
 
 ###############################################################
+######################## generator.py #########################
+###############################################################
 Testing Gaussian Random Walk:
 100 Iterations must have Average Fisher Kurtosis ~ 0.0 ± 0.05
 Test passed.
 
+###############################################################
+######################### market.py ###########################
 ###############################################################
 Testing Order Book timestamps:
 First order placed should be lowest timestamp
@@ -63,8 +69,12 @@ Placing an Ask that is LOWER than the highest and oldest Bid
     should execute that Ask and that highest + oldest Bid at the resting price
     which would be the price of the highest and oldest Bid
 Placing an Ask order at $98... while Bids are [Order(bid, price=100, agent=4, t=6), Order(bid, price=98, agent=3, t=4)]
-(4, 8, 100, 10) (4, 8, 100, 10)
 Test passed (executed trade).
 Test passed (all the same Asks are still in the order book).
 Test passed (highest and oldest Bid is removed from the order book).
 
+###############################################################
+######################### market.py ###########################
+###############################################################
+Testing Agent memory:
+Observed price should be in memory
