@@ -77,7 +77,7 @@ Test passed (highest and oldest Bid is removed from the order book).
 ######################### agent.py ############################
 ###############################################################
 Testing Agent memory:
-Initial agent should have no memory
+Newly-initialized agent should have no memory
 Test passed.
 
 ---------------------------------------------------------------
@@ -93,3 +93,6 @@ Previously observed price should insert to the existing list
 Test passed.
 
 ---------------------------------------------------------------
+Newly-initialized agent should generate no orders from memory
+Test passed.
+
