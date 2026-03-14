@@ -10,8 +10,6 @@ from src.generator import generate_fundamental_value
 from src.market import Order, Market
 from src.agent import Agent
 
-verbose = False
-
 class Logger(object):
     def __init__(self, filename="outputs.txt"):
         self.terminal = sys.stdout
@@ -39,7 +37,14 @@ def prediction_vs_actual(actual_asks_or_bids_object, predicted_asks_or_bids_list
     return
 
 if __name__ == '__main__':
-    sys.stdout = Logger("outputs.txt")
+    verbose = False
+    if len(sys.argv) > 1:
+        verbose = '--verbose' in sys.argv
+        
+    output_file = 'outputs.txt'
+    print(f'This tester outputs to {output_file}.\nThere is an optional "--verbose" flag for detailed logs.')
+
+    sys.stdout = Logger(output_file)
     sys.stderr = sys.stdout
 
     print('###############################################################')
