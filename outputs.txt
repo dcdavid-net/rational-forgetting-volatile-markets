@@ -1,0 +1,70 @@
+###############################################################
+Testing Reproducibility:
+100 Iterations must be Equal (main.py)
+Test passed.
+
+###############################################################
+Testing Gaussian Random Walk:
+100 Iterations must have Average Fisher Kurtosis ~ 0.0 ± 0.05
+Test passed.
+
+###############################################################
+Testing Order Book timestamps:
+First order placed should be lowest timestamp
+Test passed.
+
+---------------------------------------------------------------
+Testing Order Book ordering asks:
+The first ask should be the lowest price first, then oldest
+Test passed.
+
+---------------------------------------------------------------
+Testing Order Book ordering bids:
+The first ask should be the highest price first, then oldest
+Test passed.
+
+---------------------------------------------------------------
+Testing Order Book trade executions:
+There should be no executed trades yet
+    since the Asks and Bids have not yet intersected
+Test passed.
+
+---------------------------------------------------------------
+Testing Order Book trade executions:
+Placing a Bid that EXACTLY matches the lowest and oldest Ask
+    should execute that Bid and that lowest + oldest Ask at that price
+Placing a Bid order at $102... while Asks are [Order(ask, price=102, agent=99, t=2), Order(ask, price=102, agent=2, t=3), Order(ask, price=105, agent=1, t=1)]
+Test passed (executed trade).
+Test passed (lowest and oldest Ask is removed from the order book).
+Test passed (all the same Bids are still in the order book).
+
+---------------------------------------------------------------
+Testing Order Book trade executions:
+Placing a Bid that is HIGHER than the lowest and oldest Ask
+    should execute that Bid and that lowest + oldest Ask at the resting price
+    which would be the price of the lowest and oldest Ask
+Placing a Bid order at $105... while Asks are [Order(ask, price=102, agent=2, t=3), Order(ask, price=105, agent=1, t=1)]
+Test passed (executed trade).
+Test passed (lowest and oldest Ask is removed from the order book).
+Test passed (all the same Bids are still in the order book).
+
+---------------------------------------------------------------
+Testing Order Book trade executions:
+Placing an Ask that EXACTLY matches the highest and oldest Bid
+    should execute that Ask and that highest + oldest Bid at that price
+Placing an Ask order at $100... while Bids are [Order(bid, price=100, agent=100, t=5), Order(bid, price=100, agent=4, t=6), Order(bid, price=98, agent=3, t=4)]
+Test passed (executed trade).
+Test passed (all the same Asks are still in the order book).
+Test passed (highest and oldest Bid is removed from the order book).
+
+---------------------------------------------------------------
+Testing Order Book trade executions:
+Placing an Ask that is LOWER than the highest and oldest Bid
+    should execute that Ask and that highest + oldest Bid at the resting price
+    which would be the price of the highest and oldest Bid
+Placing an Ask order at $98... while Bids are [Order(bid, price=100, agent=4, t=6), Order(bid, price=98, agent=3, t=4)]
+(4, 8, 100, 10) (4, 8, 100, 10)
+Test passed (executed trade).
+Test passed (all the same Asks are still in the order book).
+Test passed (highest and oldest Bid is removed from the order book).
+
