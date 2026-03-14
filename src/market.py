@@ -1,11 +1,14 @@
 # The OrderBook and Matching Engine
 
 class Order:
-    def __init__(self, agent_id, order_type, price, timestamp):
-        self.agent_id = agent_id
+    def __init__(self, order_type, agent_id, price, timestamp):
         self.order_type = order_type  # 'bid' or 'ask'
+        self.agent_id = agent_id
         self.price = price
         self.timestamp = timestamp
+    
+    def __repr__(self):
+        return f"Order({self.order_type}, price={self.price}, agent={self.agent_id}, t={self.timestamp})"
 
 class Market:
     def __init__(self):
@@ -14,9 +17,9 @@ class Market:
         self.trade_history = []  # Record of all executed trade prices
         self.clock = 0  # Internal clock to enforce time priority
 
-    def submit_order(self, agent_id, order_type, price):
+    def submit_order(self, order_type, agent_id, price):
         self.clock += 1
-        new_order = Order(agent_id, order_type, price, self.clock)
+        new_order = Order(order_type, agent_id, price, self.clock)
         return self._match(new_order)
 
     def _match(self, incoming_order):

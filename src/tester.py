@@ -83,9 +83,9 @@ if __name__ == '__main__':
     market = Market()
 
     # Lets populate the Ask side (Sellers)
-    market.submit_order(agent_id=1, order_type='ask', price=105)
-    market.submit_order(agent_id=99, order_type='ask', price=102) # First 102 + weird agent_id to test no side effects
-    market.submit_order(agent_id=2, order_type='ask', price=102) # Second 102, to test edge case
+    market.submit_order(order_type='ask', agent_id=1, price=105)
+    market.submit_order(order_type='ask', agent_id=99, price=102) # First 102 + weird agent_id to test no side effects
+    market.submit_order(order_type='ask', agent_id=2, price=102) # Second 102, to test edge case
 
     predicted_ask_values = [
         (1,'ask',105,1),
@@ -112,9 +112,9 @@ if __name__ == '__main__':
     print('Testing Order Book ordering bids:')
     print('The first ask should be the highest price first, then oldest')
     # Lets populate the Bid side (Buyers)
-    market.submit_order(agent_id=3, order_type='bid', price=98)
-    market.submit_order(agent_id=100, order_type='bid', price=100) # First 100 + weird agent_id to test no side effects
-    market.submit_order(agent_id=4, order_type='bid', price=100) # Second 100, to test edge case
+    market.submit_order(order_type='bid', agent_id=3, price=98)
+    market.submit_order(order_type='bid', agent_id=100, price=100) # First 100 + weird agent_id to test no side effects
+    market.submit_order(order_type='bid', agent_id=4, price=100) # Second 100, to test edge case
 
     predicted_bid_values = [
         (100,'bid',100,5),
@@ -138,7 +138,7 @@ if __name__ == '__main__':
     print('''Placing a Bid that EXACTLY matches the lowest and oldest Ask
     should execute that Bid and that lowest + oldest Ask at that price''')
     print(f'Placing a Bid order at $102... while Asks are {market.asks}')
-    executed_trade = market.submit_order(agent_id=5, order_type='bid', price=102)
+    executed_trade = market.submit_order(order_type='bid', agent_id=5, price=102)
     actual_executed_trade = (executed_trade[0]['buyer_id'], executed_trade[0]['seller_id'], executed_trade[0]['price'], executed_trade[0]['timestamp'])
     predicted_executed_trade = (5, 99, 102, 7)
     if verbose: print(f'Executed trade {executed_trade}')
@@ -168,7 +168,7 @@ if __name__ == '__main__':
     should execute that Bid and that lowest + oldest Ask at the resting price
     which would be the price of the lowest and oldest Ask''')
     print(f'Placing a Bid order at $105... while Asks are {market.asks}')
-    executed_trade = market.submit_order(agent_id=6, order_type='bid', price=105)
+    executed_trade = market.submit_order(order_type='bid', agent_id=6, price=105)
     actual_executed_trade = (executed_trade[0]['buyer_id'], executed_trade[0]['seller_id'], executed_trade[0]['price'], executed_trade[0]['timestamp'])
     predicted_executed_trade = (6, 2, 102, 8)
     assert actual_executed_trade == predicted_executed_trade
@@ -195,7 +195,7 @@ if __name__ == '__main__':
     print('''Placing an Ask that EXACTLY matches the highest and oldest Bid
     should execute that Ask and that highest + oldest Bid at that price''')
     print(f'Placing an Ask order at $100... while Bids are {market.bids}')
-    executed_trade = market.submit_order(agent_id=7, order_type='ask', price=100)
+    executed_trade = market.submit_order(order_type='ask', agent_id=7, price=100)
     actual_executed_trade = (executed_trade[0]['buyer_id'], executed_trade[0]['seller_id'], executed_trade[0]['price'], executed_trade[0]['timestamp'])
     predicted_executed_trade = (100, 7, 100, 9)
     if verbose: print(f'Executed trade {executed_trade}')
@@ -223,7 +223,7 @@ if __name__ == '__main__':
     should execute that Ask and that highest + oldest Bid at the resting price
     which would be the price of the highest and oldest Bid''')
     print(f'Placing an Ask order at $98... while Bids are {market.bids}')
-    executed_trade = market.submit_order(agent_id=8, order_type='ask', price=98)
+    executed_trade = market.submit_order(order_type='ask', agent_id=8, price=98)
     actual_executed_trade = (executed_trade[0]['buyer_id'], executed_trade[0]['seller_id'], executed_trade[0]['price'], executed_trade[0]['timestamp'])
     predicted_executed_trade = (4, 8, 100, 10)
     print(actual_executed_trade, predicted_executed_trade)
