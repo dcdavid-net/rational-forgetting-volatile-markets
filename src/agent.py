@@ -63,7 +63,7 @@ class Agent:
         
         This dynamically models human "Normalcy Bias"—our agents systematically expect a standard bell curve, 
         so they are completely blindsided by fat-tail events. This cognitive flaw acts as the exact psychological 
-        catalyst for the endogenous crashes observed in our Phase 2 outputs.
+        catalyst for the endogenous crashes observed in our Phase 1 outputs.
 
         In ACT-R and IBL, Total Activation A_i includes Contextual Similarity S_{context}:
             equation: A_i = B_i + S_{context} + \epsilon
