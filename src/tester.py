@@ -263,7 +263,7 @@ if __name__ == '__main__':
     agent = Agent(agent_id=9, decay_rate=0.5, prune_threshold=-10.0, spread=2.0)
 
     print('Testing Agent memory:')
-    print('Initial agent should have no memory')
+    print('Newly-initialized agent should have no memory')
     if verbose: print(agent.memory)
     assert agent.memory == {}
     print('Test passed.\n')
@@ -290,3 +290,10 @@ if __name__ == '__main__':
     print('Test passed.\n')
 
     print('---------------------------------------------------------------')
+    print('Newly-initialized agent should generate no orders from memory')
+    agent10 = Agent(agent_id=10, decay_rate=0.5, prune_threshold=-10.0, spread=2.0)
+    orders = agent10.generate_orders(14)
+    if verbose: print(orders)
+    assert not orders
+    print('Test passed.\n')
+    
