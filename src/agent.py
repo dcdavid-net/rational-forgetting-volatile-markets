@@ -63,11 +63,13 @@ class Agent:
                 sum_decay += pow(t_k, -self.d)
             return log(sum_decay)
 
-    def generate_bid_ask_spread(self, current_time):
+    def generate_bid_ask_spread(self, current_time, do_pruning=True, add_noise=True):
         '''
         An agent would have some valuation from its highest-activated memory
         It would then say "I am willing to buy the asset below this price or
         sell it above this price", so we need to generate a bid/ask spread
+
+        Optional 'do_pruning' and 'add_noise' parameters for testing.
         '''
         if not self.memory:
             return None
@@ -76,11 +78,13 @@ class Agent:
         for price, timestamp_list in self.memory.items():
             b_i = self._get_base_level_activation(timestamp_list, current_time)
             noise = np.random.logistic(loc=0.0, scale=1.0)
-            a_i = b_i + noise
+            a_i = b_i + noise if add_noise else b_i
             activations[price] = a_i
         
         # TODO: will probably need to prune memory here
         # check memory again if pruning removed everything
+        # if do_pruning:
+            # pass
         if not self.memory:
             return None
 
