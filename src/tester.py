@@ -306,15 +306,36 @@ because the sum_decay would be 0, and ln(0) is undefined''')
     if verbose: print(base_level_activation)
     assert base_level_activation == float('-inf')
     print('Test passed.\n')
-    
+
+    print('######################## Zero Decay ###########################')
+    print('---------------------------------------------------------------')
+    print('Agent with zero decay and no memory should have base_level_activation of "-inf."')
+    agent_zero_decay = Agent(agent_id=10, decay_rate=0.0, prune_threshold=-10.0, spread=2.0)
+    base_level_activation = agent_zero_decay._get_base_level_activation(agent_zero_decay.memory.get(100), 15)
+    if verbose: print(base_level_activation)
+    assert base_level_activation == float('-inf')
+    print('Test passed.\n')
+
+    print('Agent with zero decay and no memory should have bid_ask_spread of None')
+    bid_ask_spread = agent_zero_decay.generate_bid_ask_spread(15)
+    if verbose: print(bid_ask_spread)
+    assert not bid_ask_spread
+    print('Test passed.\n')
+
     print('---------------------------------------------------------------')
     print('''Agent with zero decay and only one memory with one timestamp
 should have a base_level_activation of ln(1) = 0.0.''')
-    agent_zero_decay = Agent(agent_id=10, decay_rate=0.0, prune_threshold=-10.0, spread=2.0)
     agent_zero_decay.observe_price(price = 100, current_time=14)
     base_level_activation = agent_zero_decay._get_base_level_activation(agent_zero_decay.memory.get(100), 15)
     if verbose: print(f'Agent memory: {agent_zero_decay.memory}. Agent base_level_activation {base_level_activation}')
     assert base_level_activation == 0.0
+    print('Test passed.\n')
+
+    print('''Agent with zero decay and one memory with one timestamp should have
+bid_ask_spread of that one price ± 0.5(spread).''')
+    bid_ask_spread = agent_zero_decay.generate_bid_ask_spread(15)
+    if verbose: print(bid_ask_spread)
+    assert bid_ask_spread == {'agent_id':10, 'bid':99, 'ask':101}
     print('Test passed.\n')
 
     print('---------------------------------------------------------------')
@@ -324,6 +345,13 @@ should have a base_level_activation of ln(21) ~ 0.69.''')
     base_level_activation = agent_zero_decay._get_base_level_activation(agent_zero_decay.memory.get(100), 16)
     if verbose: print(f'Agent memory: {agent_zero_decay.memory}. Agent base_level_activation {base_level_activation}')
     assert base_level_activation == log(2)
+    print('Test passed.\n')
+
+    print('''Agent with zero decay and one memory with two timestamps should have
+bid_ask_spread of that one price ± 0.5(spread).''')
+    bid_ask_spread = agent_zero_decay.generate_bid_ask_spread(15)
+    if verbose: print(bid_ask_spread)
+    assert bid_ask_spread == {'agent_id':10, 'bid':99, 'ask':101}
     print('Test passed.\n')
 
     print('---------------------------------------------------------------')
@@ -345,6 +373,22 @@ instance that is only 1 timestep old.''')
     base_level_activation_103 = agent_zero_decay._get_base_level_activation(agent_zero_decay.memory.get(103), 1000001)
     if verbose: print(f'Agent memory: {agent_zero_decay.memory}. Agent base_level_activation_100 {base_level_activation_100}. Agent base_level_activation_103 {base_level_activation_103}')
     assert (base_level_activation_100, base_level_activation_103) == (log(2), 0.0)
+    print('Test passed.\n')
+
+    print('''Agent with zero decay and two prices in its memory should have
+bid_ask_spread of the more frequent price ± 0.5(spread).''')
+    bid_ask_spread = agent_zero_decay.generate_bid_ask_spread(1000001)
+    if verbose: print(bid_ask_spread)
+    assert bid_ask_spread == {'agent_id':10, 'bid':99, 'ask':101}
+    print('Test passed.\n')
+
+    agent_zero_decay.observe_price(price = 103, current_time=1000001)
+    agent_zero_decay.observe_price(price = 103, current_time=1000002)
+    print('''Agent with zero decay and two prices in its memory should have
+bid_ask_spread of the more frequent price ± 0.5(spread).''')
+    bid_ask_spread = agent_zero_decay.generate_bid_ask_spread(1000003)
+    if verbose: print(bid_ask_spread)
+    assert bid_ask_spread == {'agent_id':10, 'bid':103*0.99, 'ask':103*1.01}
     print('Test passed.\n')
 
     # print('---------------------------------------------------------------')

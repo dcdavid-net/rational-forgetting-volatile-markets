@@ -46,6 +46,9 @@ class Agent:
         is saying that there is zero odds that an item will be needed; and therefore should have totally
         no base-level activation.
         '''
+        if not timestamp_list:
+            return float('-inf')
+
         past_timestamps = [past_time for past_time in timestamp_list if (current_time - past_time) > 0.0]
         if not past_timestamps:
             return float('-inf')
@@ -83,8 +86,8 @@ class Agent:
 
         retrieved_value = max(activations, key=activations.get)
 
-        bid_price = retrieved_value * (1 - (0.5 * self.spread / 100))
-        ask_price = retrieved_value * (1 + (0.5 * self.spread / 100))
+        bid_price = retrieved_value * (1 - (0.5 * self.spread_pct / 100))
+        ask_price = retrieved_value * (1 + (0.5 * self.spread_pct / 100))
 
         return {
             'agent_id': self.agent_id,
