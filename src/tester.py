@@ -314,7 +314,7 @@ should have a base_level_activation of ln(1) = 0.0.''')
     agent_zero_decay.observe_price(price = 100, current_time=14)
     base_level_activation = agent_zero_decay._get_base_level_activation(agent_zero_decay.memory.get(100), 15)
     if verbose: print(f'Agent memory: {agent_zero_decay.memory}. Agent base_level_activation {base_level_activation}')
-    assert base_level_activation == log(1)
+    assert base_level_activation == 0.0
     print('Test passed.\n')
 
     print('---------------------------------------------------------------')
@@ -330,12 +330,22 @@ should have a base_level_activation of ln(21) ~ 0.69.''')
     print('''Agent with zero decay that is trying to get the base_level_activation 
 of a "present" price should get "-inf" since the price should not be counted in 
 base_level_activation if it is still in the present and not yet in the past.''')
-    agent_zero_decay.observe_price(price = 103, current_time=16)
-    base_level_activation = agent_zero_decay._get_base_level_activation(agent_zero_decay.memory.get(103), 16)
+    agent_zero_decay.observe_price(price = 103, current_time=1000000)
+    base_level_activation = agent_zero_decay._get_base_level_activation(agent_zero_decay.memory.get(103), 1000000)
     if verbose: print(f'Agent memory: {agent_zero_decay.memory}. Agent base_level_activation {base_level_activation}')
     assert base_level_activation == float('-inf')
     print('Test passed.\n')
 
+    print('---------------------------------------------------------------')
+    print('''Agent with zero decay should indiscriminately pick the price
+with the most frequency, regardless of age. Testing price = 100 with 2
+instances that are 1,000,000 timesteps old and also price = 103 with 1
+instance that is only 1 timestep old.''')
+    base_level_activation_100 = agent_zero_decay._get_base_level_activation(agent_zero_decay.memory.get(100), 1000000)
+    base_level_activation_103 = agent_zero_decay._get_base_level_activation(agent_zero_decay.memory.get(103), 1000001)
+    if verbose: print(f'Agent memory: {agent_zero_decay.memory}. Agent base_level_activation_100 {base_level_activation_100}. Agent base_level_activation_103 {base_level_activation_103}')
+    assert (base_level_activation_100, base_level_activation_103) == (log(2), 0.0)
+    print('Test passed.\n')
 
     # print('---------------------------------------------------------------')
     # print('Template')
