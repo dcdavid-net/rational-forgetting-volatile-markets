@@ -4,11 +4,69 @@ import numpy as np
 from math import log, pow
 
 class Agent:
-    def __init__(self, agent_id, decay_rate=0.5, prune_threshold=-10.0, spread=2.0):
+    def __init__(self, agent_id, decay_rate=0.5, prune_threshold=-4.0, spread=2.0):
+        '''
+        prune_threshold at -10.0 would have taken 500M days to erase a once-seen price.
+        Aside from prune_threshold, the other two levers are decay rate and number of timesteps per experiment.
+        1. Decay Rate = 0.5 has biological grounding according to “ACT-R 7.30 + Reference Manual”
+        2. 500M timesteps would be computationally intensive that would not be quite possible for my machine.
+        3. Therefore, we adjust prune_threshold at -4.0 would have taken 2980 days or 11.8 years to erase a once-seen price.
+
+        According to Anderson's "The Atomic Components of Thought," it is necessary "to fit this data
+        [by estimating the prune_threshold]... with the decay rate d fixed at .5." Therefore, we are
+        fitting the prune_threshold to our experiment's timeframe.
+
+        Important counterargument:
+        According to Malmendier's "Depression Babies: Do Macroeconomic Experiences Affect Risk-Taking?,"
+        "individuals who have experienced low stock-market returns throughout their lives report lower
+        willingness to take financial risks." This sounds contrary to how this IBL agent works since
+        we are weighing more frequent and more recent experiences more than early-life experiences.
+
+        However, based on that same paper by Malmendier, "more recent returns experiences have stronger
+        effects, but experiences early in life still have significant influence." Also, according to 
+        Jiang's "Investor Memory and Biased Beliefs: Evidence from the Field," "when prompted to recall
+        a past market episode, investors tend to retrieve both recent episodes and distant episodes
+        featuring dramatic market movements such as bubbles and crashes."
+        
+        This is exactly how our IBL agent works because early-life experiences that have bundled 
+        extreme returns would have a high activation due to the summation of the base level activation.
+
+        As a result of this literature review, we should actually be storing returns rather than continuous prices.
+        - Continuous prices run into a problem where a price like 100.01 and 100.02 do not have shared activation.
+        This is Representational Sparsity, where the representation of what an agent stores in its memory creates too
+        much sparsity in activation.
+        - Binned prices partially solves the problem by grouping continuous prices into intervals like $0.25. In that
+        instance, $100.01 and $100.24 would be grouped together. However, $100.24 and $100.26 are closer together
+        than $100.01 and $100.24. This is Quantization Error, where binning continuous values creates a stair-step
+        pattern that limits precision.
+        - Instead, storing binned returns into memory like the following allows for relative binning and ensuring that
+        related prices are grouped together.
+            - Bin 1: Extreme Negative (< -3%)
+            - Bin 2: Moderate Negative (-3% to -1%)
+            - Bin 3: Flat / Noise (-1% to 1%)
+            - Bin 4: Moderate Positive (1% to 3%)
+            - Bin 5: Extreme Positive (> 3%)
+
+        The underlying fundamental value is a Gaussian random walk. Therefore, Bin 3 will have the highest frequency
+        and recency, and therefore a high base-level activation as well. If retrieval is only based on b_i, the agent
+        would exclusively retrieve flat, boring memories, contradicting Jiang's findings of retrieving dramatic episodes.
+
+        However, in ACT-R and IBL, Total Activation A_i includes Contextual Similarity S_{context}:
+            equation: $$A_i = B_i + S_{context} + \epsilon$$
+        While Bin 3 dominates B_i, distant dramatic episodes (Bins 1 and 5) are retrieved when the current market
+        context (e.g. sudden price drop or sudden price hike) matches the historical context of extreme bins.
+        The similarty match provides a massive context boost, overriding the high base-level activation of Bin 3.
+        This should trigger the recall of distant market shocks.
+        '''
         self.agent_id = agent_id
         self.d = decay_rate
         self.prune_threshold = prune_threshold
-        self.spread_pct = spread # static for now. TODO: in Phase 2, may have to make this variable
+
+        '''
+        spread_pct static for now. TODO: in Phase 2, may have to make this variable
+        defaulting to 2.0 so that we functionally do spreads of ± 1 percent
+        '''
+        self.spread_pct = spread
 
         self.memory = {}
     
