@@ -6,6 +6,7 @@ import os
 import numpy as np
 from scipy.stats import kurtosis
 from main import set_reproducibility_seed
+from math import log
 from src.generator import generate_fundamental_value
 from src.market import Order, Market
 from src.agent import Agent
@@ -290,10 +291,55 @@ if __name__ == '__main__':
     print('Test passed.\n')
 
     print('---------------------------------------------------------------')
-    print('Newly-initialized agent should generate no orders from memory')
+    print('Newly-initialized agent should generate no bid_ask_spread from memory')
     agent10 = Agent(agent_id=10, decay_rate=0.5, prune_threshold=-10.0, spread=2.0)
-    orders = agent10.generate_orders(14)
-    if verbose: print(orders)
-    assert not orders
+    bid_ask_spread = agent10.generate_bid_ask_spread(14)
+    if verbose: print(bid_ask_spread)
+    assert not bid_ask_spread
+    print('Test passed.\n')
+
+    print('---------------------------------------------------------------')
+    print('''An empty memory list should have base_level_activation = "-inf"
+because the sum_decay would be 0, and ln(0) is undefined''')
+    base_level_activation = agent10._get_base_level_activation([], 15)
+    print(base_level_activation)
+    if verbose: print(base_level_activation)
+    assert base_level_activation == float('-inf')
     print('Test passed.\n')
     
+    print('---------------------------------------------------------------')
+    print('''Agent with zero decay and only one memory with one timestamp
+should have a base_level_activation of ln(1) = 0.0.''')
+    agent_zero_decay = Agent(agent_id=10, decay_rate=0.0, prune_threshold=-10.0, spread=2.0)
+    agent_zero_decay.observe_price(price = 100, current_time=14)
+    base_level_activation = agent_zero_decay._get_base_level_activation(agent_zero_decay.memory.get(100), 15)
+    if verbose: print(f'Agent memory: {agent_zero_decay.memory}. Agent base_level_activation {base_level_activation}')
+    assert base_level_activation == log(1)
+    print('Test passed.\n')
+
+    print('---------------------------------------------------------------')
+    print('''Agent with zero decay and only one memory with two timestamps
+should have a base_level_activation of ln(21) ~ 0.69.''')
+    agent_zero_decay.observe_price(price = 100, current_time=15)
+    base_level_activation = agent_zero_decay._get_base_level_activation(agent_zero_decay.memory.get(100), 16)
+    if verbose: print(f'Agent memory: {agent_zero_decay.memory}. Agent base_level_activation {base_level_activation}')
+    assert base_level_activation == log(2)
+    print('Test passed.\n')
+
+    print('---------------------------------------------------------------')
+    print('''Agent with zero decay that is trying to get the base_level_activation 
+of a "present" price should get "-inf" since the price should not be counted in 
+base_level_activation if it is still in the present and not yet in the past.''')
+    agent_zero_decay.observe_price(price = 103, current_time=16)
+    base_level_activation = agent_zero_decay._get_base_level_activation(agent_zero_decay.memory.get(103), 16)
+    if verbose: print(f'Agent memory: {agent_zero_decay.memory}. Agent base_level_activation {base_level_activation}')
+    assert base_level_activation == float('-inf')
+    print('Test passed.\n')
+
+
+    # print('---------------------------------------------------------------')
+    # print('Template')
+    # var = 1
+    # if verbose: print(f'')
+    # assert 1
+    # print('Test passed.\n')
