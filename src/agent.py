@@ -51,18 +51,21 @@ class Agent:
             - Bin 4: Moderate Positive (0.5σ to 2σ)
             - Bin 5: Extreme Positive (> 2σ)
             
-        Why Z-Scores? According to Anderson's Rational Analysis framework, cognitive categorization optimally adapts 
-        to the environment's baseline statistical structure. Since our Fundamental Value is a Gaussian Random Walk, 
-        agents natively expect a normal distribution. This elegantly models human "Normalcy Bias"—agents systematically 
-        underestimate fat-tail events, which acts as the exact psychological catalyst for the endogenous crashes 
-        observed in the Phase 2 outputs.
+        Why Z-Scores? According to Anderson's "Is human cognition adaptive?," "A rational analysis is an explanation 
+        of an aspect of human behavior based on the assumption that it is optimized somehow to the structure of 
+        the environment... the strong regularities in basic cognitive functions such as memory or categorization 
+        reflect a statistical optimization to the structure of the environment." 
+        
+        Since our Fundamental Value is a Gaussian Random Walk, our agents natively expect a normal distribution. 
+        However, in real financial markets, according to Welch's "A Heuristic for Fat-TailedStock Market Returns,"
+        "Large negative stock and equity portfolio rates of return occur more frequently than they should under 
+        the Gaussian normal distribution. They tend to be kurtotic."
+        
+        This dynamically models human "Normalcy Bias"—our agents systematically expect a standard bell curve, 
+        so they are completely blindsided by fat-tail events. This cognitive flaw acts as the exact psychological 
+        catalyst for the endogenous crashes observed in our Phase 2 outputs.
 
-        The underlying fundamental value is a Gaussian random walk. Therefore, Bin 3 will have the highest frequency
-        and recency, and therefore an overwhelmingly high base-level activation (B_i). If retrieval is only based on 
-        B_i, the agent would exclusively retrieve flat, boring memories, contradicting Jiang's findings of retrieving 
-        dramatic episodes.
-
-        However, in ACT-R and IBL, Total Activation A_i includes Contextual Similarity S_{context}:
+        In ACT-R and IBL, Total Activation A_i includes Contextual Similarity S_{context}:
             equation: A_i = B_i + S_{context} + \epsilon
         While Bin 3 dominates B_i, distant dramatic episodes (Bins 1 and 5) are retrieved when the current market
         context (e.g., sudden EWMA volatility spike) matches the historical context of extreme bins.
