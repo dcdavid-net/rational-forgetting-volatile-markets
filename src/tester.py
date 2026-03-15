@@ -73,7 +73,7 @@ if __name__ == '__main__':
     print('######################## generator.py #########################')
     print('###############################################################')
     print('Testing Gaussian Random Walk:')
-    print('100 Iterations must have Average Fisher Kurtosis ~ 0.0 ± 0.05')
+    print('100 Iterations must have Average Fisher Kurtosis ≈ 0.0 ± 0.05')
     set_reproducibility_seed(0) # reset the seed
     fisher_kurtoses = []
     for i in range(100):
@@ -340,7 +340,7 @@ bid_ask_spread of that one price ± 0.5(spread).''')
 
     print('---------------------------------------------------------------')
     print('''Agent with zero decay and only one memory with two timestamps
-should have a base_level_activation of ln(21) ~ 0.69.''')
+should have a base_level_activation of ln(21) ≈ 0.69.''')
     agent_zero_decay.observe_price(price = 100, current_time=15)
     base_level_activation = agent_zero_decay._get_base_level_activation(timestamp_list=agent_zero_decay.memory.get(100), current_time=16)
     if verbose: print(f'Agent memory: {agent_zero_decay.memory}. Agent base_level_activation {base_level_activation}')
@@ -424,7 +424,7 @@ bid_ask_spread of that one price ± 0.5(spread).''')
 
     print('---------------------------------------------------------------')
     print('''Agent with non-zero decay and only one memory with two timestamps
-should have a base_level_activation of less than ln(21) ~ 0.69.''')
+should have a base_level_activation of less than ln(21) ≈ 0.69.''')
     # Personal reminder:
     # Would it truly ALWAYS be less than?
     # Noise is additive, so... couldnt total activation be sometimes greater than ln(length of list)?
@@ -466,10 +466,13 @@ instance that is only 1 timestep old.''')
     print('''Agent with non-zero decay and two prices in its memory should have
 bid_ask_spread of the more recent price ± 0.5(spread).''')
     bid_ask_spread = agent_nonzero_decay.generate_bid_ask_spread(current_time=1000001, do_pruning=False, add_noise=False)
-    if verbose: print(bid_ask_spread)
+    if verbose: print(bid_ask_spread) 
     assert bid_ask_spread == {'agent_id':10, 'bid':103*0.99, 'ask':103*1.01}
     print('Test passed.\n')
 
+    agent_nonzero_decay.observe_price(price = 100, current_time=14)
+    agent_nonzero_decay.observe_price(price = 100, current_time=15)
+    agent_nonzero_decay.observe_price(price = 103, current_time=1000000)
     agent_nonzero_decay.observe_price(price = 100, current_time=1000001)
     agent_nonzero_decay.observe_price(price = 100, current_time=1000002)
     print('''Agent with non-zero decay and two prices in its memory should have
@@ -477,6 +480,31 @@ bid_ask_spread of the more recent price ± 0.5(spread).''')
     bid_ask_spread = agent_nonzero_decay.generate_bid_ask_spread(current_time=1000003, do_pruning=False, add_noise=False)
     if verbose: print(bid_ask_spread)
     assert bid_ask_spread == {'agent_id':10, 'bid':99, 'ask':101}
+    print('Test passed.\n')
+
+    print('---------------------------------------------------------------')
+    # t_1 = 1,000,000,000 - 14 ≈ 1,000,000,000
+    # t_2 = 1,000,000,000 - 15 ≈ 1,000,000,000
+    # t_1^{-0.5} ≈ 0.00003162277
+    # t_2^{-0.5} ≈ 0.00003162277
+    # sum t_1, t_2 ≈ 0.00006324554
+    # ln(sum t_2, t_2) ≈ -9.66848594668 < -10 pruning threshold
+    # so gotta have 1,000,000,000,000 or 1 trillion instead of just 1 billion
+    agent_nonzero_decay_with_pruning = Agent(agent_id=10, decay_rate=0.5, prune_threshold=-10.0, spread=2.0)
+    agent_nonzero_decay_with_pruning.observe_price(price = 100, current_time=14)
+    agent_nonzero_decay_with_pruning.observe_price(price = 100, current_time=15)
+    agent_nonzero_decay_with_pruning.observe_price(price = 103, current_time=1000000000)
+    print('''Agent with non-zero decay should prune very old prices.''')
+    bid_ask_spread = agent_nonzero_decay_with_pruning.generate_bid_ask_spread(current_time=1000000001, do_pruning=True, add_noise=False)
+    if verbose: print(agent_nonzero_decay_with_pruning.memory)
+    assert agent_nonzero_decay_with_pruning.memory == {100: [14, 15], 103: [1000000000]}
+    print('Test passed.\n')
+
+    print('''Agent with non-zero decay should prune very old prices.''')
+    agent_nonzero_decay_with_pruning.observe_price(price = 103, current_time=1000000000000) # to prevent pruning of this price
+    bid_ask_spread = agent_nonzero_decay_with_pruning.generate_bid_ask_spread(current_time=1000000000001, do_pruning=True, add_noise=False)
+    if verbose: print(agent_nonzero_decay_with_pruning.memory)
+    assert agent_nonzero_decay_with_pruning.memory == {103: [1000000000, 1000000000000]}
     print('Test passed.\n')
 
     # print('---------------------------------------------------------------')

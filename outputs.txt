@@ -9,7 +9,7 @@ Test passed.
 ######################## generator.py #########################
 ###############################################################
 Testing Gaussian Random Walk:
-100 Iterations must have Average Fisher Kurtosis ~ 0.0 ± 0.05
+100 Iterations must have Average Fisher Kurtosis ≈ 0.0 ± 0.05
 Test passed.
 
 ###############################################################
@@ -121,7 +121,7 @@ Test passed.
 
 ---------------------------------------------------------------
 Agent with zero decay and only one memory with two timestamps
-should have a base_level_activation of ln(21) ~ 0.69.
+should have a base_level_activation of ln(21) ≈ 0.69.
 Test passed.
 
 Agent with zero decay and one memory with two timestamps should have
@@ -168,7 +168,7 @@ Test passed.
 
 ---------------------------------------------------------------
 Agent with non-zero decay and only one memory with two timestamps
-should have a base_level_activation of less than ln(21) ~ 0.69.
+should have a base_level_activation of less than ln(21) ≈ 0.69.
 Test passed.
 
 Agent with non-zero decay and one memory with two timestamps should have
@@ -194,5 +194,12 @@ Test passed.
 
 Agent with non-zero decay and two prices in its memory should have
 bid_ask_spread of the more recent price ± 0.5(spread).
+Test passed.
+
+---------------------------------------------------------------
+Agent with non-zero decay should prune very old prices.
+Test passed.
+
+Agent with non-zero decay should prune very old prices.
 Test passed.
 

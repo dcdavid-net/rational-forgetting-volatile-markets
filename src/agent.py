@@ -63,6 +63,11 @@ class Agent:
                 sum_decay += pow(t_k, -self.d)
             return log(sum_decay)
 
+    def _do_prune_memory(self, activations):
+        prices_to_prune = [price for price, a_i in activations.items() if a_i < self.prune_threshold]
+        for price in prices_to_prune:
+            del self.memory[price]
+
     def generate_bid_ask_spread(self, current_time, do_pruning=True, add_noise=True):
         '''
         An agent would have some valuation from its highest-activated memory
@@ -81,12 +86,12 @@ class Agent:
             a_i = b_i + noise if add_noise else b_i
             activations[price] = a_i
         
-        # TODO: will probably need to prune memory here
-        # check memory again if pruning removed everything
-        # if do_pruning:
-            # pass
-        if not self.memory:
-            return None
+        if do_pruning:
+            self._do_prune_memory(activations)
+        
+            # check memory again if pruning removed everything
+            if not self.memory: 
+                return None
 
         retrieved_value = max(activations, key=activations.get)
 
