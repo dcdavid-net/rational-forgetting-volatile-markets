@@ -85,7 +85,7 @@ class Agent:
         self.memory = {}
     
     def __repr__(self):
-        return f"Agent({self.agent_id}, decay_rate={self.d}, prune_threshold={self.prune_threshold}, spread={self.spread})"
+        return f"Agent({self.agent_id}, decay_rate={self.d}, prune_threshold={self.prune_threshold}, spread={self.spread_pct})"
 
     def observe_price(self, price, current_time):
         if price not in self.memory:
