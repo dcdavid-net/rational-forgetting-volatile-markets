@@ -10,11 +10,15 @@ class Agent:
         Aside from prune_threshold, the other two levers are decay rate and number of timesteps per experiment.
         1. Decay Rate = 0.5 has biological grounding according to “ACT-R 7.30 + Reference Manual”
         2. 500M timesteps would be computationally intensive that would not be quite possible for my machine.
-        3. Therefore, we adjust prune_threshold at -4.0 would have taken 2980 days or 11.8 years to erase a once-seen price.
+        3. Therefore, we adjust prune_threshold at [TODO: get the empirical threshold] would have taken 2980 days or 11.8 years to erase a once-seen price.
+            - TODO: Empirical reverse-engineering
 
         According to Anderson's "The Atomic Components of Thought," it is necessary "to fit this data
-        [by estimating the prune_threshold]... with the decay rate d fixed at .5." Therefore, we are
-        fitting the prune_threshold to our experiment's timeframe.
+        [by estimating the prune_threshold]... with the decay rate d fixed at .5." 
+        Rather than an arbitrary -4.0 or -10.0, we reverse-engineer the prune_threshold using empirical 
+        S&P 500 data. It is calibrated so the base-level activation of an extreme event (e.g., a Bin 1 crash) 
+        barely survives the maximum historical time gap between major market shocks (e.g., 2008 to 2020). 
+        This prevents premature systemic amnesia while managing computational constraints.
 
         Important counterargument:
         According to Malmendier's "Depression Babies: Do Macroeconomic Experiences Affect Risk-Taking?,"
@@ -39,24 +43,31 @@ class Agent:
         instance, $100.01 and $100.24 would be grouped together. However, $100.24 and $100.26 are closer together
         than $100.01 and $100.24. This is Quantization Error, where binning continuous values creates a stair-step
         pattern that limits precision.
-        - Instead, storing binned returns into memory like the following allows for relative binning and ensuring that
-        related prices are grouped together.
-            - Bin 1: Extreme Negative (< -3%)
-            - Bin 2: Moderate Negative (-3% to -1%)
-            - Bin 3: Flat / Noise (-1% to 1%)
-            - Bin 4: Moderate Positive (1% to 3%)
-            - Bin 5: Extreme Positive (> 3%)
+        - Instead, storing binned returns via rolling Z-scores (standard deviations from the mean) allows for 
+        dynamic, environment-relative categorization:
+            - Bin 1: Extreme Negative (< -2σ)
+            - Bin 2: Moderate Negative (-2σ to -0.5σ)
+            - Bin 3: Flat / Noise (-0.5σ to 0.5σ)
+            - Bin 4: Moderate Positive (0.5σ to 2σ)
+            - Bin 5: Extreme Positive (> 2σ)
+            
+        Why Z-Scores? Following Anderson's Rational Analysis framework, cognitive categorization optimally adapts 
+        to the environment's baseline statistical structure. Since our Fundamental Value is a Gaussian Random Walk, 
+        agents natively expect a normal distribution. This elegantly models human "Normalcy Bias"—agents systematically 
+        underestimate fat-tail events, which acts as the exact psychological catalyst for the endogenous crashes 
+        observed in the Phase 2 outputs.
 
         The underlying fundamental value is a Gaussian random walk. Therefore, Bin 3 will have the highest frequency
-        and recency, and therefore a high base-level activation as well. If retrieval is only based on b_i, the agent
-        would exclusively retrieve flat, boring memories, contradicting Jiang's findings of retrieving dramatic episodes.
+        and recency, and therefore an overwhelmingly high base-level activation (B_i). If retrieval is only based on 
+        B_i, the agent would exclusively retrieve flat, boring memories, contradicting Jiang's findings of retrieving 
+        dramatic episodes.
 
         However, in ACT-R and IBL, Total Activation A_i includes Contextual Similarity S_{context}:
-            equation: $$A_i = B_i + S_{context} + \epsilon$$
+            equation: A_i = B_i + S_{context} + \epsilon
         While Bin 3 dominates B_i, distant dramatic episodes (Bins 1 and 5) are retrieved when the current market
-        context (e.g. sudden price drop or sudden price hike) matches the historical context of extreme bins.
-        The similarty match provides a massive context boost, overriding the high base-level activation of Bin 3.
-        This should trigger the recall of distant market shocks.
+        context (e.g., sudden EWMA volatility spike) matches the historical context of extreme bins.
+        The similarity match provides a massive context boost, overriding the high base-level activation of Bin 3.
+        This triggers the recall of distant market shocks, completing the feedback loop of panic.
         '''
         self.agent_id = agent_id
         self.d = decay_rate
