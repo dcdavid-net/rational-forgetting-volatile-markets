@@ -51,7 +51,7 @@ class Agent:
             - Bin 4: Moderate Positive (0.5σ to 2σ)
             - Bin 5: Extreme Positive (> 2σ)
             
-        Why Z-Scores? Following Anderson's Rational Analysis framework, cognitive categorization optimally adapts 
+        Why Z-Scores? According to Anderson's Rational Analysis framework, cognitive categorization optimally adapts 
         to the environment's baseline statistical structure. Since our Fundamental Value is a Gaussian Random Walk, 
         agents natively expect a normal distribution. This elegantly models human "Normalcy Bias"—agents systematically 
         underestimate fat-tail events, which acts as the exact psychological catalyst for the endogenous crashes 
