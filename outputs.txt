@@ -3,306 +3,6 @@
 ###############################################################
 Testing Reproducibility:
 100 Iterations must be Equal (main.py)
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
-Successfully generated 2000 price steps.
-First 5 prices: [100.49671415 100.35844985 101.00613839 102.52916825 102.29501487]
-Final price: 190.17
 Test passed.
 
 ###############################################################
@@ -310,106 +10,6 @@ Test passed.
 ###############################################################
 Testing Gaussian Random Walk:
 100 Iterations must have Average Fisher Kurtosis ~ 0.0 ± 0.05
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.05042822881767206
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.0449779942532329
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.10051041608013955
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.02441542317627965
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.03396706600917199
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.1437379060596915
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.05171223505455247
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.1610357452477622
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.1358469349637117
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.14645884375426732
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.12461202553454154
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.13236372747528558
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.04140010574710162
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.0705662981602373
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.06571957996948896
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.05512541167865237
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.1060415619088726
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.09505494162418904
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.15260044879480006
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.043449937368974734
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.138161835562721
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.05402864942388996
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.052136696021059414
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.11797807592995113
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.016619092720933537
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.003392383691240397
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.0021047185886717834
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.03050224079067787
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.052413870924064465
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.0014149145809891905
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.04440624067093646
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.07518597563721574
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.11682438213495283
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.06276334339101597
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.059619252838291725
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.2303728522807651
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.06972884943157309
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.16210870435818192
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.24888157389020416
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.055253139029962206
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.18787792565210948
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.07411246710794783
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.03709567940826508
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.02621173081518524
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.07763947511413782
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.10742181540311435
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.05984212081965001
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.10372095352039246
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.08984284465771442
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.04688130310290051
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.07841367891378637
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.07148587887579438
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.09903946576108247
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.056617114719488715
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.30625165991655123
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.21044427324861026
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.04469773762892215
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.32607922111346355
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.017795417221734944
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.12617002572510883
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.10589723284939767
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.06398243477030352
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.05715822906479984
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.038368138954770536
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.03450634113483009
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.10858422675563428
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.13753937181115816
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.06173546146862918
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.03503850080856852
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.16018545349058
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.10357124294981368
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.2192639904010001
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.18506684114675798
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.03826985278905903
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.03880189667716305
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.01903447934531588
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.07090753322391574
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.028748879202749933
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.1193492781184915
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.04009601481018121
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.09860111700699958
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.052012712883039214
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.09663612757715478
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.09239591489111199
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.011017853963550372
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.05875537080888815
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.031087279579056215
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.14911939841930133
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.03538891812014322
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.03132431933838653
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.036524973332001665
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.08157185496077002
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.09334325796891285
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.09118393018481408
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.022832170874609314
-Fisher Kurtosis (expected around 0.0 for normal distribution): 0.06365502729075923
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.19745775098904472
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.02424266742331893
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.07565020547255719
-Fisher Kurtosis (expected around 0.0 for normal distribution): -0.005200608115432104
 Test passed.
 
 ###############################################################
@@ -417,26 +17,22 @@ Test passed.
 ###############################################################
 Testing Order Book timestamps:
 First order placed should be lowest timestamp
-Asks: [Order(ask, price=102, agent=99, t=2), Order(ask, price=102, agent=2, t=3), Order(ask, price=105, agent=1, t=1)]
 Test passed.
 
 ---------------------------------------------------------------
 Testing Order Book ordering asks:
 The first ask should be the lowest price first, then oldest
-Asks: [Order(ask, price=102, agent=99, t=2), Order(ask, price=102, agent=2, t=3), Order(ask, price=105, agent=1, t=1)]
 Test passed.
 
 ---------------------------------------------------------------
 Testing Order Book ordering bids:
 The first ask should be the highest price first, then oldest
-Bids: [Order(bid, price=100, agent=100, t=5), Order(bid, price=100, agent=4, t=6), Order(bid, price=98, agent=3, t=4)]
 Test passed.
 
 ---------------------------------------------------------------
 Testing Order Book trade executions:
 There should be no executed trades yet
     since the Asks and Bids have not yet intersected
-Trade History: []
 Test passed.
 
 ---------------------------------------------------------------
@@ -444,11 +40,8 @@ Testing Order Book trade executions:
 Placing a Bid that EXACTLY matches the lowest and oldest Ask
     should execute that Bid and that lowest + oldest Ask at that price
 Placing a Bid order at $102... while Asks are [Order(ask, price=102, agent=99, t=2), Order(ask, price=102, agent=2, t=3), Order(ask, price=105, agent=1, t=1)]
-(5, 99, 102, 7) (5, 99, 102, 7)
 Test passed (executed trade).
-Asks: [Order(ask, price=102, agent=2, t=3), Order(ask, price=105, agent=1, t=1)]
 Test passed (lowest and oldest Ask is removed from the order book).
-Bids: [Order(bid, price=100, agent=100, t=5), Order(bid, price=100, agent=4, t=6), Order(bid, price=98, agent=3, t=4)]
 Test passed (all the same Bids are still in the order book).
 
 ---------------------------------------------------------------
@@ -457,11 +50,8 @@ Placing a Bid that is HIGHER than the lowest and oldest Ask
     should execute that Bid and that lowest + oldest Ask at the resting price
     which would be the price of the lowest and oldest Ask
 Placing a Bid order at $105... while Asks are [Order(ask, price=102, agent=2, t=3), Order(ask, price=105, agent=1, t=1)]
-(6, 2, 102, 8) (6, 2, 102, 8)
 Test passed (executed trade).
-Asks: [Order(ask, price=105, agent=1, t=1)]
 Test passed (lowest and oldest Ask is removed from the order book).
-Bids: [Order(bid, price=100, agent=100, t=5), Order(bid, price=100, agent=4, t=6), Order(bid, price=98, agent=3, t=4)]
 Test passed (all the same Bids are still in the order book).
 
 ---------------------------------------------------------------
@@ -469,11 +59,8 @@ Testing Order Book trade executions:
 Placing an Ask that EXACTLY matches the highest and oldest Bid
     should execute that Ask and that highest + oldest Bid at that price
 Placing an Ask order at $100... while Bids are [Order(bid, price=100, agent=100, t=5), Order(bid, price=100, agent=4, t=6), Order(bid, price=98, agent=3, t=4)]
-Executed trade [{'buyer_id': 100, 'seller_id': 7, 'price': 100, 'timestamp': 9}]
 Test passed (executed trade).
-Asks: [Order(ask, price=105, agent=1, t=1)]
 Test passed (all the same Asks are still in the order book).
-Bids: [Order(bid, price=100, agent=4, t=6), Order(bid, price=98, agent=3, t=4)]
 Test passed (highest and oldest Bid is removed from the order book).
 
 ---------------------------------------------------------------
@@ -482,11 +69,8 @@ Placing an Ask that is LOWER than the highest and oldest Bid
     should execute that Ask and that highest + oldest Bid at the resting price
     which would be the price of the highest and oldest Bid
 Placing an Ask order at $98... while Bids are [Order(bid, price=100, agent=4, t=6), Order(bid, price=98, agent=3, t=4)]
-(4, 8, 100, 10) (4, 8, 100, 10)
 Test passed (executed trade).
-Asks: [Order(ask, price=105, agent=1, t=1)]
 Test passed (all the same Asks are still in the order book).
-Bids: [Order(bid, price=98, agent=3, t=4)]
 Test passed (highest and oldest Bid is removed from the order book).
 
 ###############################################################
@@ -494,73 +78,60 @@ Test passed (highest and oldest Bid is removed from the order book).
 ###############################################################
 Testing Agent memory:
 Newly-initialized agent should have no memory
-{}
 Test passed.
 
 ---------------------------------------------------------------
 Observed price should be in memory
-{100: [11]}
 Test passed.
 
 ---------------------------------------------------------------
 New observed price should insert a new price to memory
-{100: [11], 102: [12]}
 Test passed.
 
 ---------------------------------------------------------------
 Previously observed price should insert to the existing list
-{100: [11], 102: [12, 13]}
 Test passed.
 
 ---------------------------------------------------------------
 Newly-initialized agent should generate no bid_ask_spread from memory
-None
 Test passed.
 
 ---------------------------------------------------------------
 An empty memory list should have base_level_activation = "-inf"
 because the sum_decay would be 0, and ln(0) is undefined
 -inf
--inf
 Test passed.
 
 ######################## Zero Decay ###########################
 ---------------------------------------------------------------
 Agent with zero decay and no memory should have base_level_activation of "-inf."
--inf
 Test passed.
 
 Agent with zero decay and no memory should have bid_ask_spread of None
-None
 Test passed.
 
 ---------------------------------------------------------------
 Agent with zero decay and only one memory with one timestamp
 should have a base_level_activation of ln(1) = 0.0.
-Agent memory: {100: [14]}. Agent base_level_activation 0.0
 Test passed.
 
 Agent with zero decay and one memory with one timestamp should have
 bid_ask_spread of that one price ± 0.5(spread).
-{'agent_id': 10, 'bid': 99.0, 'ask': 101.0}
 Test passed.
 
 ---------------------------------------------------------------
 Agent with zero decay and only one memory with two timestamps
 should have a base_level_activation of ln(21) ~ 0.69.
-Agent memory: {100: [14, 15]}. Agent base_level_activation 0.6931471805599453
 Test passed.
 
 Agent with zero decay and one memory with two timestamps should have
 bid_ask_spread of that one price ± 0.5(spread).
-{'agent_id': 10, 'bid': 99.0, 'ask': 101.0}
 Test passed.
 
 ---------------------------------------------------------------
 Agent with zero decay that is trying to get the base_level_activation 
 of a "present" price should get "-inf" since the price should not be counted in 
 base_level_activation if it is still in the present and not yet in the past.
-Agent memory: {100: [14, 15], 103: [1000000]}. Agent base_level_activation -inf
 Test passed.
 
 ---------------------------------------------------------------
@@ -568,16 +139,60 @@ Agent with zero decay should indiscriminately pick the price
 with the most frequency, regardless of age. Testing price = 100 with 2
 instances that are 1,000,000 timesteps old and also price = 103 with 1
 instance that is only 1 timestep old.
-Agent memory: {100: [14, 15], 103: [1000000]}. Agent base_level_activation_100 0.6931471805599453. Agent base_level_activation_103 0.0
 Test passed.
 
 Agent with zero decay and two prices in its memory should have
 bid_ask_spread of the more frequent price ± 0.5(spread).
-{'agent_id': 10, 'bid': 99.0, 'ask': 101.0}
 Test passed.
 
 Agent with zero decay and two prices in its memory should have
 bid_ask_spread of the more frequent price ± 0.5(spread).
-{'agent_id': 10, 'bid': 101.97, 'ask': 104.03}
+Test passed.
+
+###################### Non-Zero Decay #########################
+---------------------------------------------------------------
+Agent with non-zero decay and no memory should have base_level_activation of "-inf."
+Test passed.
+
+Agent with non-zero decay and no memory should have bid_ask_spread of None
+Test passed.
+
+---------------------------------------------------------------
+Agent with non-zero decay and only one memory with one timestamp
+should have a base_level_activation of ln(1) = 0.0.
+Test passed.
+
+Agent with non-zero decay and one memory with one timestamp should have
+bid_ask_spread of that one price ± 0.5(spread).
+Test passed.
+
+---------------------------------------------------------------
+Agent with non-zero decay and only one memory with two timestamps
+should have a base_level_activation of less than ln(21) ~ 0.69.
+Test passed.
+
+Agent with non-zero decay and one memory with two timestamps should have
+bid_ask_spread of that one price ± 0.5(spread).
+Test passed.
+
+---------------------------------------------------------------
+Agent with non-zero decay that is trying to get the base_level_activation 
+of a "present" price should get "-inf" since the price should not be counted in 
+base_level_activation if it is still in the present and not yet in the past.
+Test passed.
+
+---------------------------------------------------------------
+Agent with non-zero decay should pick the price that is a lot more recent, 
+holding less regard to frequency than a zero-decay agent. Testing price = 100 with 2
+instances that are 1,000,000 timesteps old and also price = 103 with 1
+instance that is only 1 timestep old.
+Test passed.
+
+Agent with non-zero decay and two prices in its memory should have
+bid_ask_spread of the more recent price ± 0.5(spread).
+Test passed.
+
+Agent with non-zero decay and two prices in its memory should have
+bid_ask_spread of the more recent price ± 0.5(spread).
 Test passed.
 
