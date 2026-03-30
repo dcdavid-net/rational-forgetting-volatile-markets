@@ -11,6 +11,7 @@ rational-forgetting-volatile-markets/
 │   ├── Jiang -- Investor Memory and Biased Beliefs Evidence from the Field.pdf
 │   ├── Lieder -- Resource-rational analysis Understanding human cognition as the optimal use of.pdf
 │   ├── Malmendier -- Depression Babies Do Macroeconomic Experiences Affect Risk-Taking.pdf
+│   ├── RiskMetrics Technical Document.pdf
 │   └── Welch -- A Heuristic for Fat-Tailed Stock Market Returns.pdf
 ├── data/
 │   └── sp500_historical_returns.csv
