@@ -10,8 +10,8 @@ class Agent:
         Aside from prune_threshold, the other two levers are decay rate and number of timesteps per experiment.
         1. Decay Rate = 0.5 has biological grounding according to “ACT-R 7.30 + Reference Manual”
         2. 500M timesteps would be computationally intensive that would not be quite possible for my machine.
-        3. Therefore, we adjust prune_threshold at [TODO: get the empirical threshold] would have taken 2980 days or 11.8 years to erase a once-seen price.
-            - TODO: Empirical reverse-engineering
+        3. Therefore, we adjust prune_threshold at -2.292483739335286.
+            - Empirical reverse engineering. Tau = -2.292483739335286
 
         According to Anderson's "The Atomic Components of Thought," it is necessary "to fit this data
         [by estimating the prune_threshold]... with the decay rate d fixed at .5." 
