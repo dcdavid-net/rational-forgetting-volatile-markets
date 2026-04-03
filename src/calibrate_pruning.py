@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from math import log
 
-def calibrate_pruning(input_filename="../data/sp500_historical_returns.csv", decay_rate=0.5, n_iterations=10000):
+def calibrate_pruning(input_filename="../data/sp500_historical_returns.csv", decay_rate=0.5, n_iterations=10000, verbose=True):
     # Implement bootstrapping for statistical robustness
     df = pd.read_csv(input_filename, index_col='Date', parse_dates=True)
 
@@ -16,7 +16,7 @@ def calibrate_pruning(input_filename="../data/sp500_historical_returns.csv", dec
     df.dropna(inplace=True)
     df = df[df['EWMA_volatility'] > 0]
 
-    print(df.head())
+    if verbose: print(df.head())
 
     # Z = (val - mean) / (std). Assuming zero mean, Z = val / std
     df['Z_Score'] = df['Log_Return'] / df['EWMA_volatility'] 
@@ -30,8 +30,8 @@ def calibrate_pruning(input_filename="../data/sp500_historical_returns.csv", dec
     event_indices = extreme_negative_events.index.to_numpy()
     gaps = np.diff(event_indices)
 
-    print(f'\nNumber of extreme events found: {len(extreme_negative_events)}')
-    print(f'Theoretical 100% max gap: {gaps.max()} days')
+    if verbose: print(f'\nNumber of extreme events found: {len(extreme_negative_events)}')
+    if verbose: print(f'Theoretical 100% max gap: {gaps.max()} days')
 
     max_gap = gaps.max()
     max_gap_idx = gaps.argmax()
@@ -39,7 +39,7 @@ def calibrate_pruning(input_filename="../data/sp500_historical_returns.csv", dec
     start_event_date = extreme_negative_events.iloc[max_gap_idx]['Date'].date()
     end_event_date = extreme_negative_events.iloc[max_gap_idx + 1]['Date'].date()
 
-    print(f'Longest extreme negative event range: {start_event_date} to {end_event_date}')
+    if verbose: print(f'Longest extreme negative event range: {start_event_date} to {end_event_date}')
 
     # Ok now let's bootstrap to get a robust "95th percentile"
     np.random.seed(42)
@@ -50,16 +50,17 @@ def calibrate_pruning(input_filename="../data/sp500_historical_returns.csv", dec
         p95 = np.percentile(random_gap, 95)
         bootstrapped_95th_percentiles.append(p95)
     bootstrapped_95th_percentiles = np.array(bootstrapped_95th_percentiles)
-    print(f'Bootstrapped 95th percentiles: {bootstrapped_95th_percentiles}')
+    if verbose: print(f'Bootstrapped 95th percentiles: {bootstrapped_95th_percentiles}')
 
     # need upper 95% CI so we remember vast majority of normal periods
     # ci_lower = np.percentile(bootstrapped_95th_percentiles, 2.5)
     target_gap = np.percentile(bootstrapped_95th_percentiles, 97.5)
-    print(f'Target gap 95% upper CI: {target_gap}')
+    if verbose: print(f'Target gap 95% upper CI: {target_gap}')
 
     tau_prune = -decay_rate * log(target_gap)
-    print(tau_prune)
+    print(f'Tau = {tau_prune}')
     return tau_prune
 
 if __name__ == "__main__":
-    calibrate_pruning()
+    verbose = False
+    calibrate_pruning(verbose=verbose)
