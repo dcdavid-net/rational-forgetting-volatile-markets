@@ -135,10 +135,12 @@ class Agent:
                 sum_decay += pow(t_k, -self.d)
             return log(sum_decay)
 
-    def _do_prune_memory(self, activations):
-        prices_to_prune = [price for price, a_i in activations.items() if a_i < self.prune_threshold]
+    def _do_prune_memory(self, base_activations, total_activations):
+        prices_to_prune = [price for price, b_i in base_activations.items() if b_i < self.prune_threshold]
         for price in prices_to_prune:
-            del self.memory[price]
+            del self.memory[price] # delete from memory
+            del total_activations[price] # delete from the temporary retrieval memory too
+
 
     def generate_bid_ask_spread(self, current_time, do_pruning=True, add_noise=True):
         '''
@@ -151,21 +153,24 @@ class Agent:
         if not self.memory:
             return None
         
-        activations = {}
+        total_activations = {}
+        base_activations = {} # Create a separate dictionary for pruning
         for price, timestamp_list in self.memory.items():
             b_i = self._get_base_level_activation(timestamp_list, current_time)
             noise = np.random.logistic(loc=0.0, scale=1.0)
             a_i = b_i + noise if add_noise else b_i
-            activations[price] = a_i
+
+            base_activations[price] = b_i
+            total_activations[price] = a_i
         
         if do_pruning:
-            self._do_prune_memory(activations)
+            self._do_prune_memory(base_activations, total_activations)
         
             # check memory again if pruning removed everything
             if not self.memory: 
                 return None
 
-        retrieved_value = max(activations, key=activations.get)
+        retrieved_value = max(total_activations, key=total_activations.get)
 
         bid_price = retrieved_value * (1 - (0.5 * self.spread_pct / 100))
         ask_price = retrieved_value * (1 + (0.5 * self.spread_pct / 100))
