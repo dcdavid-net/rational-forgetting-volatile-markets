@@ -4,7 +4,7 @@ import numpy as np
 from math import log, pow
 
 class Agent:
-    def __init__(self, agent_id, decay_rate=0.5, prune_threshold=-4.0, spread=2.0):
+    def __init__(self, agent_id, decay_rate=0.5, prune_threshold=-2.292483739335286, spread=2.0):
         '''
         prune_threshold at -10.0 would have taken 500M days to erase a once-seen price.
         Aside from prune_threshold, the other two levers are decay rate and number of timesteps per experiment.
