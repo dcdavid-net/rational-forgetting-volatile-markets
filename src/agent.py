@@ -172,8 +172,8 @@ class Agent:
     def _do_prune_memory(self, base_activations, total_activations):
         bins_to_prune = [bin_id for bin_id, b_i in base_activations.items() if b_i < self.prune_threshold]
         for bin_id in bins_to_prune:
-            del self.memory[price] # delete from memory
-            del total_activations[price] # delete from the temporary retrieval memory too
+            del self.memory[bin_id] # delete from memory
+            del total_activations[bin_id] # delete from the temporary retrieval memory too
 
     def generate_bid_ask_spread(self, current_price, current_volatility, current_time, do_pruning=True, add_noise=True):
         '''
