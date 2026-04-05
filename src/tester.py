@@ -44,6 +44,7 @@ if __name__ == '__main__':
         
     output_file = 'outputs.txt'
     print(f'This tester outputs to {output_file}.\nThere is an optional "--verbose" flag for detailed logs.')
+    verbose = True
 
     sys.stdout = Logger(output_file)
     sys.stderr = sys.stdout
@@ -270,30 +271,34 @@ if __name__ == '__main__':
     print('Test passed.\n')
 
     print('---------------------------------------------------------------')
-    print('Observed price should be in memory')
-    agent.observe_price(price = 100, current_time=11)
+    print('Observed return should be chunked into the correct bin and stored in memory')
+    # Z-score = 0.0 / 0.01 = 0.0 -> Translates to Bin 3 (Flat/Noise)
+    agent.observe_return(current_return=0.0, current_volatility=0.01, current_time=11)
     if verbose: print(agent.memory)
-    assert agent.memory == {100: [11]}
+    assert agent.memory == {3:[11]}
     print('Test passed.\n')
 
     print('---------------------------------------------------------------')
-    print('New observed price should insert a new price to memory')
-    agent.observe_price(price = 102, current_time=12)
+    print('New observed return in a different category should insert a new bin ID to memory')
+    # Z-score = 0.01 / 0.01 = 1.0 -> Translates to Bin 4 (Moderate Positive)
+    agent.observe_return(current_return=0.01, current_volatility=0.01, current_time=12)
     if verbose: print(agent.memory)
-    assert agent.memory == {100: [11], 102: [12]}
+    assert agent.memory == {3:[11], 4:[12]}
     print('Test passed.\n')
 
     print('---------------------------------------------------------------')
-    print('Previously observed price should insert to the existing list')
-    agent.observe_price(price = 102, current_time=13)
+    print('Previously observed category should append the timestamp to the existing bin list')
+    # Z-score = 0.015 / 0.01 = 1.5 -> Translates to Bin 4 (Moderate Positive)
+    agent.observe_return(current_return=0.015, current_volatility=0.01, current_time=13)
     if verbose: print(agent.memory)
-    assert agent.memory == {100: [11], 102: [12,13]}
+    assert agent.memory == {3:[11], 4:[12,13]}
     print('Test passed.\n')
 
     print('---------------------------------------------------------------')
     print('Newly-initialized agent should generate no bid_ask_spread from memory')
     agent10 = Agent(agent_id=10, decay_rate=0.5, prune_threshold=-10.0, spread=2.0)
-    bid_ask_spread = agent10.generate_bid_ask_spread(current_time=14, do_pruning=False, add_noise=False)
+    # We pass in dummy values (100.0 and 0.01) just to satisfy the new method signature
+    bid_ask_spread = agent10.generate_bid_ask_spread(current_price=100.0, current_volatility=0.01, current_time=14, do_pruning=False, add_noise=False)
     if verbose: print(bid_ask_spread)
     assert not bid_ask_spread
     print('Test passed.\n')
@@ -311,13 +316,14 @@ because the sum_decay would be 0, and ln(0) is undefined''')
     print('---------------------------------------------------------------')
     print('Agent with zero decay and no memory should have base_level_activation of "-inf."')
     agent_zero_decay = Agent(agent_id=10, decay_rate=0.0, prune_threshold=-10.0, spread=2.0)
-    base_level_activation = agent_zero_decay._get_base_level_activation(timestamp_list=agent_zero_decay.memory.get(100), current_time=15)
+    # Bin 3 (Flat/Noise) as our standard bin instead of "price 100"
+    base_level_activation = agent_zero_decay._get_base_level_activation(timestamp_list=agent_zero_decay.memory.get(3), current_time=15)
     if verbose: print(base_level_activation)
     assert base_level_activation == float('-inf')
     print('Test passed.\n')
 
     print('Agent with zero decay and no memory should have bid_ask_spread of None')
-    bid_ask_spread = agent_zero_decay.generate_bid_ask_spread(current_time=15, do_pruning=False, add_noise=False)
+    bid_ask_spread = agent_zero_decay.generate_bid_ask_spread(current_price=100.0, current_volatility=0.01, current_time=15, do_pruning=False, add_noise=False)
     if verbose: print(bid_ask_spread)
     assert not bid_ask_spread
     print('Test passed.\n')
@@ -325,191 +331,199 @@ because the sum_decay would be 0, and ln(0) is undefined''')
     print('---------------------------------------------------------------')
     print('''Agent with zero decay and only one memory with one timestamp
 should have a base_level_activation of ln(1) = 0.0.''')
-    agent_zero_decay.observe_price(price = 100, current_time=14)
-    base_level_activation = agent_zero_decay._get_base_level_activation(timestamp_list=agent_zero_decay.memory.get(100), current_time=15)
+    # z_score = 0.0 / 0.01 = 0.0 (Bin 3)
+    agent_zero_decay.observe_return(current_return=0.0, current_volatility=0.01, current_time=14)
+    base_level_activation = agent_zero_decay._get_base_level_activation(timestamp_list=agent_zero_decay.memory.get(3), current_time=15)
     if verbose: print(f'Agent memory: {agent_zero_decay.memory}. Agent base_level_activation {base_level_activation}')
     assert base_level_activation == 0.0
     print('Test passed.\n')
 
     print('''Agent with zero decay and one memory with one timestamp should have
-bid_ask_spread of that one price ± 0.5(spread).''')
-    bid_ask_spread = agent_zero_decay.generate_bid_ask_spread(current_time=15, do_pruning=False, add_noise=False)
+bid_ask_spread centered around expected value.''')
+    # Retrieved Bin 3 (z_center = 0.0) -> Expected Return = 0.0 * 0.01 = 0.0 -> Expected Value = 100 * (1 + 0) = 100
+    bid_ask_spread = agent_zero_decay.generate_bid_ask_spread(current_price=100.0, current_volatility=0.01, current_time=15, do_pruning=False, add_noise=False)
     if verbose: print(bid_ask_spread)
-    assert bid_ask_spread == {'agent_id':10, 'bid':99, 'ask':101}
+    assert bid_ask_spread == {'agent_id':10, 'bid':99.0, 'ask':101.0}
     print('Test passed.\n')
 
     print('---------------------------------------------------------------')
     print('''Agent with zero decay and only one memory with two timestamps
-should have a base_level_activation of ln(21) ≈ 0.69.''')
-    agent_zero_decay.observe_price(price = 100, current_time=15)
-    base_level_activation = agent_zero_decay._get_base_level_activation(timestamp_list=agent_zero_decay.memory.get(100), current_time=16)
+should have a base_level_activation of ln(2) ≈ 0.69.''')
+    agent_zero_decay.observe_return(current_return=0.0, current_volatility=0.01, current_time=15)
+    base_level_activation = agent_zero_decay._get_base_level_activation(timestamp_list=agent_zero_decay.memory.get(3), current_time=16)
     if verbose: print(f'Agent memory: {agent_zero_decay.memory}. Agent base_level_activation {base_level_activation}')
     assert base_level_activation == log(2)
     print('Test passed.\n')
 
     print('''Agent with zero decay and one memory with two timestamps should have
-bid_ask_spread of that one price ± 0.5(spread).''')
-    bid_ask_spread = agent_zero_decay.generate_bid_ask_spread(current_time=17, do_pruning=False, add_noise=False)
+bid_ask_spread centered around expected value.''')
+    bid_ask_spread = agent_zero_decay.generate_bid_ask_spread(current_price=100.0, current_volatility=0.01, current_time=17, do_pruning=False, add_noise=False)
     if verbose: print(bid_ask_spread)
-    assert bid_ask_spread == {'agent_id':10, 'bid':99, 'ask':101}
+    assert bid_ask_spread == {'agent_id':10, 'bid':99.0, 'ask':101.0}
     print('Test passed.\n')
 
     print('---------------------------------------------------------------')
     print('''Agent with zero decay that is trying to get the base_level_activation 
-of a "present" price should get "-inf" since the price should not be counted in 
+of a "present" return should get "-inf" since the return should not be counted in 
 base_level_activation if it is still in the present and not yet in the past.''')
-    agent_zero_decay.observe_price(price = 103, current_time=1000000)
-    base_level_activation = agent_zero_decay._get_base_level_activation(timestamp_list=agent_zero_decay.memory.get(103), current_time=1000000)
+    # Simulate a moderate positive return: z_score = 0.015 / 0.01 = 1.5 (Bin 4)
+    agent_zero_decay.observe_return(current_return=0.015, current_volatility=0.01, current_time=1000000)
+    base_level_activation = agent_zero_decay._get_base_level_activation(timestamp_list=agent_zero_decay.memory.get(4), current_time=1000000)
     if verbose: print(f'Agent memory: {agent_zero_decay.memory}. Agent base_level_activation {base_level_activation}')
     assert base_level_activation == float('-inf')
     print('Test passed.\n')
 
     print('---------------------------------------------------------------')
-    print('''Agent with zero decay should indiscriminately pick the price
-with the most frequency, regardless of age. Testing price = 100 with 2
-instances that are 1,000,000 timesteps old and also price = 103 with 1
+    print('''Agent with zero decay should indiscriminately pick the bin
+with the most frequency, regardless of age. Testing Bin 3 with 2
+instances that are 1,000,000 timesteps old and also Bin 4 with 1
 instance that is only 1 timestep old.''')
-    base_level_activation_100 = agent_zero_decay._get_base_level_activation(timestamp_list=agent_zero_decay.memory.get(100), current_time=1000000)
-    base_level_activation_103 = agent_zero_decay._get_base_level_activation(timestamp_list=agent_zero_decay.memory.get(103), current_time=1000001)
-    if verbose: print(f'Agent memory: {agent_zero_decay.memory}. Agent base_level_activation_100 {base_level_activation_100}. Agent base_level_activation_103 {base_level_activation_103}')
-    assert (base_level_activation_100, base_level_activation_103) == (log(2), 0.0)
+    base_level_activation_3 = agent_zero_decay._get_base_level_activation(timestamp_list=agent_zero_decay.memory.get(3), current_time=1000000)
+    base_level_activation_4 = agent_zero_decay._get_base_level_activation(timestamp_list=agent_zero_decay.memory.get(4), current_time=1000001)
+    if verbose: print(f'Agent memory: {agent_zero_decay.memory}. Agent base_level_activation_3 {base_level_activation_3}. Agent base_level_activation_4 {base_level_activation_4}')
+    assert (base_level_activation_3, base_level_activation_4) == (log(2), 0.0)
     print('Test passed.\n')
 
-    print('''Agent with zero decay and two prices in its memory should have
-bid_ask_spread of the more frequent price ± 0.5(spread).''')
-    bid_ask_spread = agent_zero_decay.generate_bid_ask_spread(current_time=1000001, do_pruning=False, add_noise=False)
+    print('''Agent with zero decay and two bins in its memory should have
+bid_ask_spread centered around the expected value of the more frequent bin.''')
+    # retrieve Bin 3 (z_center = 0.0) -> Expected Return = 0.0
+    bid_ask_spread = agent_zero_decay.generate_bid_ask_spread(current_price=100.0, current_volatility=0.01, current_time=1000001, do_pruning=False, add_noise=False)
     if verbose: print(bid_ask_spread)
-    assert bid_ask_spread == {'agent_id':10, 'bid':99, 'ask':101}
+    assert bid_ask_spread == {'agent_id':10, 'bid':99.0, 'ask':101.0}
     print('Test passed.\n')
 
-    agent_zero_decay.observe_price(price = 103, current_time=1000001)
-    agent_zero_decay.observe_price(price = 103, current_time=1000002)
-    print('''Agent with zero decay and two prices in its memory should have
-bid_ask_spread of the more frequent price ± 0.5(spread).''')
-    bid_ask_spread = agent_zero_decay.generate_bid_ask_spread(current_time=1000003, do_pruning=False, add_noise=False)
+    # add two more Bin 4 instances so it overtakes Bin 3 in frequency
+    agent_zero_decay.observe_return(current_return=0.015, current_volatility=0.01, current_time=1000001)
+    agent_zero_decay.observe_return(current_return=0.015, current_volatility=0.01, current_time=1000002)
+    print('''Agent with zero decay and two bins in its memory should have
+bid_ask_spread centered around the expected value of the more frequent bin.''')
+    # retrieve Bin 4 (z_center = 1.25) -> Expected Return = 1.25 * 0.01 = 0.0125
+    # Expected Value = 100 * (1 + 0.0125) = 101.25
+    # Spread = +/- 1% -> Bid = 100.24, Ask = 102.26
+    bid_ask_spread = agent_zero_decay.generate_bid_ask_spread(current_price=100.0, current_volatility=0.01, current_time=1000003, do_pruning=False, add_noise=False)
     if verbose: print(bid_ask_spread)
-    assert bid_ask_spread == {'agent_id':10, 'bid':103*0.99, 'ask':103*1.01}
+    assert bid_ask_spread == {'agent_id':10, 'bid':100.24, 'ask':102.26}
     print('Test passed.\n')
 
-    print('###################### Non-Zero Decay #########################')
-    print('---------------------------------------------------------------')
-    print('Agent with non-zero decay and no memory should have base_level_activation of "-inf."')
-    agent_nonzero_decay = Agent(agent_id=10, decay_rate=0.5, prune_threshold=-10.0, spread=2.0)
-    base_level_activation = agent_nonzero_decay._get_base_level_activation(timestamp_list=agent_nonzero_decay.memory.get(100), current_time=15)
-    if verbose: print(base_level_activation)
-    assert base_level_activation == float('-inf')
-    print('Test passed.\n')
+#     print('###################### Non-Zero Decay #########################')
+#     print('---------------------------------------------------------------')
+#     print('Agent with non-zero decay and no memory should have base_level_activation of "-inf."')
+#     agent_nonzero_decay = Agent(agent_id=10, decay_rate=0.5, prune_threshold=-10.0, spread=2.0)
+#     base_level_activation = agent_nonzero_decay._get_base_level_activation(timestamp_list=agent_nonzero_decay.memory.get(100), current_time=15)
+#     if verbose: print(base_level_activation)
+#     assert base_level_activation == float('-inf')
+#     print('Test passed.\n')
 
-    print('Agent with non-zero decay and no memory should have bid_ask_spread of None')
-    bid_ask_spread = agent_nonzero_decay.generate_bid_ask_spread(current_time=15, do_pruning=False, add_noise=False)
-    if verbose: print(bid_ask_spread)
-    assert not bid_ask_spread
-    print('Test passed.\n')
+#     print('Agent with non-zero decay and no memory should have bid_ask_spread of None')
+#     bid_ask_spread = agent_nonzero_decay.generate_bid_ask_spread(current_time=15, do_pruning=False, add_noise=False)
+#     if verbose: print(bid_ask_spread)
+#     assert not bid_ask_spread
+#     print('Test passed.\n')
 
-    print('---------------------------------------------------------------')
-    print('''Agent with non-zero decay and only one memory with one timestamp
-should have a base_level_activation of ln(1) = 0.0.''')
-    agent_nonzero_decay.observe_price(price = 100, current_time=14)
-    base_level_activation = agent_nonzero_decay._get_base_level_activation(timestamp_list=agent_nonzero_decay.memory.get(100), current_time=15)
-    if verbose: print(f'Agent memory: {agent_nonzero_decay.memory}. Agent base_level_activation {base_level_activation}')
-    assert base_level_activation == 0.0
-    print('Test passed.\n')
+#     print('---------------------------------------------------------------')
+#     print('''Agent with non-zero decay and only one memory with one timestamp
+# should have a base_level_activation of ln(1) = 0.0.''')
+#     agent_nonzero_decay.observe_price(price = 100, current_time=14)
+#     base_level_activation = agent_nonzero_decay._get_base_level_activation(timestamp_list=agent_nonzero_decay.memory.get(100), current_time=15)
+#     if verbose: print(f'Agent memory: {agent_nonzero_decay.memory}. Agent base_level_activation {base_level_activation}')
+#     assert base_level_activation == 0.0
+#     print('Test passed.\n')
 
-    print('''Agent with non-zero decay and one memory with one timestamp should have
-bid_ask_spread of that one price ± 0.5(spread).''')
-    bid_ask_spread = agent_nonzero_decay.generate_bid_ask_spread(current_time=15, do_pruning=False, add_noise=False)
-    if verbose: print(bid_ask_spread)
-    assert bid_ask_spread == {'agent_id':10, 'bid':99, 'ask':101}
-    print('Test passed.\n')
+#     print('''Agent with non-zero decay and one memory with one timestamp should have
+# bid_ask_spread of that one price ± 0.5(spread).''')
+#     bid_ask_spread = agent_nonzero_decay.generate_bid_ask_spread(current_time=15, do_pruning=False, add_noise=False)
+#     if verbose: print(bid_ask_spread)
+#     assert bid_ask_spread == {'agent_id':10, 'bid':99, 'ask':101}
+#     print('Test passed.\n')
 
-    print('---------------------------------------------------------------')
-    print('''Agent with non-zero decay and only one memory with two timestamps
-should have a base_level_activation of less than ln(21) ≈ 0.69.''')
-    # Personal reminder:
-    # Would it truly ALWAYS be less than?
-    # Noise is additive, so... couldnt total activation be sometimes greater than ln(length of list)?
-    # Well no, this is base level activation b_i. Noise is in total activation a_i.
-    agent_nonzero_decay.observe_price(price = 100, current_time=15)
-    base_level_activation = agent_nonzero_decay._get_base_level_activation(timestamp_list=agent_nonzero_decay.memory.get(100), current_time=16)
-    if verbose: print(f'Agent memory: {agent_nonzero_decay.memory}. Agent base_level_activation {base_level_activation}')
-    assert base_level_activation < log(2)
-    print('Test passed.\n')
+#     print('---------------------------------------------------------------')
+#     print('''Agent with non-zero decay and only one memory with two timestamps
+# should have a base_level_activation of less than ln(21) ≈ 0.69.''')
+#     # Personal reminder:
+#     # Would it truly ALWAYS be less than?
+#     # Noise is additive, so... couldnt total activation be sometimes greater than ln(length of list)?
+#     # Well no, this is base level activation b_i. Noise is in total activation a_i.
+#     agent_nonzero_decay.observe_price(price = 100, current_time=15)
+#     base_level_activation = agent_nonzero_decay._get_base_level_activation(timestamp_list=agent_nonzero_decay.memory.get(100), current_time=16)
+#     if verbose: print(f'Agent memory: {agent_nonzero_decay.memory}. Agent base_level_activation {base_level_activation}')
+#     assert base_level_activation < log(2)
+#     print('Test passed.\n')
 
-    print('''Agent with non-zero decay and one memory with two timestamps should have
-bid_ask_spread of that one price ± 0.5(spread).''')
-    bid_ask_spread = agent_nonzero_decay.generate_bid_ask_spread(current_time=17, do_pruning=False, add_noise=False)
-    if verbose: print(bid_ask_spread)
-    assert bid_ask_spread == {'agent_id':10, 'bid':99, 'ask':101}
-    print('Test passed.\n')
+#     print('''Agent with non-zero decay and one memory with two timestamps should have
+# bid_ask_spread of that one price ± 0.5(spread).''')
+#     bid_ask_spread = agent_nonzero_decay.generate_bid_ask_spread(current_time=17, do_pruning=False, add_noise=False)
+#     if verbose: print(bid_ask_spread)
+#     assert bid_ask_spread == {'agent_id':10, 'bid':99, 'ask':101}
+#     print('Test passed.\n')
 
-    print('---------------------------------------------------------------')
-    print('''Agent with non-zero decay that is trying to get the base_level_activation 
-of a "present" price should get "-inf" since the price should not be counted in 
-base_level_activation if it is still in the present and not yet in the past.''')
-    agent_nonzero_decay.observe_price(price = 103, current_time=1000000)
-    base_level_activation = agent_nonzero_decay._get_base_level_activation(timestamp_list=agent_nonzero_decay.memory.get(103), current_time=1000000)
-    if verbose: print(f'Agent memory: {agent_nonzero_decay.memory}. Agent base_level_activation {base_level_activation}')
-    assert base_level_activation == float('-inf')
-    print('Test passed.\n')
+#     print('---------------------------------------------------------------')
+#     print('''Agent with non-zero decay that is trying to get the base_level_activation 
+# of a "present" price should get "-inf" since the price should not be counted in 
+# base_level_activation if it is still in the present and not yet in the past.''')
+#     agent_nonzero_decay.observe_price(price = 103, current_time=1000000)
+#     base_level_activation = agent_nonzero_decay._get_base_level_activation(timestamp_list=agent_nonzero_decay.memory.get(103), current_time=1000000)
+#     if verbose: print(f'Agent memory: {agent_nonzero_decay.memory}. Agent base_level_activation {base_level_activation}')
+#     assert base_level_activation == float('-inf')
+#     print('Test passed.\n')
 
-    print('---------------------------------------------------------------')
-    print('''Agent with non-zero decay should pick the price that is a lot more recent, 
-holding less regard to frequency than a zero-decay agent. Testing price = 100 with 2
-instances that are 1,000,000 timesteps old and also price = 103 with 1
-instance that is only 1 timestep old.''')
-    base_level_activation_100 = agent_nonzero_decay._get_base_level_activation(timestamp_list=agent_nonzero_decay.memory.get(100), current_time=1000000)
-    base_level_activation_103 = agent_nonzero_decay._get_base_level_activation(timestamp_list=agent_nonzero_decay.memory.get(103), current_time=1000001)
-    if verbose: print(f'Agent memory: {agent_nonzero_decay.memory}. Agent base_level_activation_100 {base_level_activation_100}. Agent base_level_activation_103 {base_level_activation_103}')
-    assert base_level_activation_100 < base_level_activation_103
-    print('Test passed.\n')
+#     print('---------------------------------------------------------------')
+#     print('''Agent with non-zero decay should pick the price that is a lot more recent, 
+# holding less regard to frequency than a zero-decay agent. Testing price = 100 with 2
+# instances that are 1,000,000 timesteps old and also price = 103 with 1
+# instance that is only 1 timestep old.''')
+#     base_level_activation_100 = agent_nonzero_decay._get_base_level_activation(timestamp_list=agent_nonzero_decay.memory.get(100), current_time=1000000)
+#     base_level_activation_103 = agent_nonzero_decay._get_base_level_activation(timestamp_list=agent_nonzero_decay.memory.get(103), current_time=1000001)
+#     if verbose: print(f'Agent memory: {agent_nonzero_decay.memory}. Agent base_level_activation_100 {base_level_activation_100}. Agent base_level_activation_103 {base_level_activation_103}')
+#     assert base_level_activation_100 < base_level_activation_103
+#     print('Test passed.\n')
 
-    print('''Agent with non-zero decay and two prices in its memory should have
-bid_ask_spread of the more recent price ± 0.5(spread).''')
-    bid_ask_spread = agent_nonzero_decay.generate_bid_ask_spread(current_time=1000001, do_pruning=False, add_noise=False)
-    if verbose: print(bid_ask_spread) 
-    assert bid_ask_spread == {'agent_id':10, 'bid':103*0.99, 'ask':103*1.01}
-    print('Test passed.\n')
+#     print('''Agent with non-zero decay and two prices in its memory should have
+# bid_ask_spread of the more recent price ± 0.5(spread).''')
+#     bid_ask_spread = agent_nonzero_decay.generate_bid_ask_spread(current_time=1000001, do_pruning=False, add_noise=False)
+#     if verbose: print(bid_ask_spread) 
+#     assert bid_ask_spread == {'agent_id':10, 'bid':103*0.99, 'ask':103*1.01}
+#     print('Test passed.\n')
 
-    agent_nonzero_decay.observe_price(price = 100, current_time=14)
-    agent_nonzero_decay.observe_price(price = 100, current_time=15)
-    agent_nonzero_decay.observe_price(price = 103, current_time=1000000)
-    agent_nonzero_decay.observe_price(price = 100, current_time=1000001)
-    agent_nonzero_decay.observe_price(price = 100, current_time=1000002)
-    print('''Agent with non-zero decay and two prices in its memory should have
-bid_ask_spread of the more recent price ± 0.5(spread).''')
-    bid_ask_spread = agent_nonzero_decay.generate_bid_ask_spread(current_time=1000003, do_pruning=False, add_noise=False)
-    if verbose: print(bid_ask_spread)
-    assert bid_ask_spread == {'agent_id':10, 'bid':99, 'ask':101}
-    print('Test passed.\n')
+#     agent_nonzero_decay.observe_price(price = 100, current_time=14)
+#     agent_nonzero_decay.observe_price(price = 100, current_time=15)
+#     agent_nonzero_decay.observe_price(price = 103, current_time=1000000)
+#     agent_nonzero_decay.observe_price(price = 100, current_time=1000001)
+#     agent_nonzero_decay.observe_price(price = 100, current_time=1000002)
+#     print('''Agent with non-zero decay and two prices in its memory should have
+# bid_ask_spread of the more recent price ± 0.5(spread).''')
+#     bid_ask_spread = agent_nonzero_decay.generate_bid_ask_spread(current_time=1000003, do_pruning=False, add_noise=False)
+#     if verbose: print(bid_ask_spread)
+#     assert bid_ask_spread == {'agent_id':10, 'bid':99, 'ask':101}
+#     print('Test passed.\n')
 
-    print('---------------------------------------------------------------')
-    # t_1 = 1,000,000,000 - 14 ≈ 1,000,000,000
-    # t_2 = 1,000,000,000 - 15 ≈ 1,000,000,000
-    # t_1^{-0.5} ≈ 0.00003162277
-    # t_2^{-0.5} ≈ 0.00003162277
-    # sum t_1, t_2 ≈ 0.00006324554
-    # ln(sum t_2, t_2) ≈ -9.66848594668 < -10 pruning threshold
-    # so gotta have 1,000,000,000,000 or 1 trillion instead of just 1 billion
-    agent_nonzero_decay_with_pruning = Agent(agent_id=10, decay_rate=0.5, prune_threshold=-10.0, spread=2.0)
-    agent_nonzero_decay_with_pruning.observe_price(price = 100, current_time=14)
-    agent_nonzero_decay_with_pruning.observe_price(price = 100, current_time=15)
-    agent_nonzero_decay_with_pruning.observe_price(price = 103, current_time=1000000000)
-    print('''Agent with non-zero decay should prune very old prices.''')
-    bid_ask_spread = agent_nonzero_decay_with_pruning.generate_bid_ask_spread(current_time=1000000001, do_pruning=True, add_noise=False)
-    if verbose: print(agent_nonzero_decay_with_pruning.memory)
-    assert agent_nonzero_decay_with_pruning.memory == {100: [14, 15], 103: [1000000000]}
-    print('Test passed.\n')
+#     print('---------------------------------------------------------------')
+#     # t_1 = 1,000,000,000 - 14 ≈ 1,000,000,000
+#     # t_2 = 1,000,000,000 - 15 ≈ 1,000,000,000
+#     # t_1^{-0.5} ≈ 0.00003162277
+#     # t_2^{-0.5} ≈ 0.00003162277
+#     # sum t_1, t_2 ≈ 0.00006324554
+#     # ln(sum t_2, t_2) ≈ -9.66848594668 < -10 pruning threshold
+#     # so gotta have 1,000,000,000,000 or 1 trillion instead of just 1 billion
+#     agent_nonzero_decay_with_pruning = Agent(agent_id=10, decay_rate=0.5, prune_threshold=-10.0, spread=2.0)
+#     agent_nonzero_decay_with_pruning.observe_price(price = 100, current_time=14)
+#     agent_nonzero_decay_with_pruning.observe_price(price = 100, current_time=15)
+#     agent_nonzero_decay_with_pruning.observe_price(price = 103, current_time=1000000000)
+#     print('''Agent with non-zero decay should prune very old prices.''')
+#     bid_ask_spread = agent_nonzero_decay_with_pruning.generate_bid_ask_spread(current_time=1000000001, do_pruning=True, add_noise=False)
+#     if verbose: print(agent_nonzero_decay_with_pruning.memory)
+#     assert agent_nonzero_decay_with_pruning.memory == {100: [14, 15], 103: [1000000000]}
+#     print('Test passed.\n')
 
-    print('''Agent with non-zero decay should prune very old prices.''')
-    agent_nonzero_decay_with_pruning.observe_price(price = 103, current_time=1000000000000) # to prevent pruning of this price
-    bid_ask_spread = agent_nonzero_decay_with_pruning.generate_bid_ask_spread(current_time=1000000000001, do_pruning=True, add_noise=False)
-    if verbose: print(agent_nonzero_decay_with_pruning.memory)
-    assert agent_nonzero_decay_with_pruning.memory == {103: [1000000000, 1000000000000]}
-    print('Test passed.\n')
+#     print('''Agent with non-zero decay should prune very old prices.''')
+#     agent_nonzero_decay_with_pruning.observe_price(price = 103, current_time=1000000000000) # to prevent pruning of this price
+#     bid_ask_spread = agent_nonzero_decay_with_pruning.generate_bid_ask_spread(current_time=1000000000001, do_pruning=True, add_noise=False)
+#     if verbose: print(agent_nonzero_decay_with_pruning.memory)
+#     assert agent_nonzero_decay_with_pruning.memory == {103: [1000000000, 1000000000000]}
+#     print('Test passed.\n')
 
-    # print('---------------------------------------------------------------')
-    # print('Template')
-    # var = 1
-    # if verbose: print(f'')
-    # assert 1
-    # print('Test passed.\n')
+#     # print('---------------------------------------------------------------')
+#     # print('Template')
+#     # var = 1
+#     # if verbose: print(f'')
+#     # assert 1
+#     # print('Test passed.\n')

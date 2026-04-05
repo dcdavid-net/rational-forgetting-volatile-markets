@@ -87,10 +87,44 @@ class Agent:
     def __repr__(self):
         return f"Agent({self.agent_id}, decay_rate={self.d}, prune_threshold={self.prune_threshold}, spread={self.spread_pct})"
 
-    def observe_price(self, price, current_time):
-        if price not in self.memory:
-            self.memory[price] = []
-        self.memory[price].append(current_time)
+    def _get_bin(self, z_score):
+        if z_score < -2.0:
+            return 1
+        elif z_score < -0.5:
+            return 2
+        elif z_score <= 0.5:
+            return 3
+        elif z_score <= 2.0:
+            return 4
+        else:
+            return 5
+
+    def _get_representative_return(self, bin_id, current_volatility):
+        z_centers = {
+            1: -2.5,  # Extreme negative/left tail
+            2: -1.25, # Moderate negative center
+            3: 0.0,   # Flat center
+            4: 1.25,  # Moderate positive center
+            5: 2.5    # Extreme positive/right tail
+        }
+        return z_centers[bin_id] * current_volatility
+
+    def observe_return(self, current_return, current_volatility, current_time):
+        if current_volatility == 0.0:
+            z_score = 0.0
+        else:
+            z_score = current_return / current_volatility
+            
+        bin_id = self._get_bin(z_score)
+
+        if bin_id not in self.memory:
+            self.memory[bin_id] = []
+        self.memory[bin_id].append(current_time)
+
+    # def observe_price(self, price, current_time):
+    #     if price not in self.memory:
+    #         self.memory[price] = []
+    #     self.memory[price].append(current_time)
 
     def _get_base_level_activation(self, timestamp_list, current_time):
         '''
@@ -136,13 +170,12 @@ class Agent:
             return log(sum_decay)
 
     def _do_prune_memory(self, base_activations, total_activations):
-        prices_to_prune = [price for price, b_i in base_activations.items() if b_i < self.prune_threshold]
-        for price in prices_to_prune:
+        bins_to_prune = [bin_id for bin_id, b_i in base_activations.items() if b_i < self.prune_threshold]
+        for bin_id in bins_to_prune:
             del self.memory[price] # delete from memory
             del total_activations[price] # delete from the temporary retrieval memory too
 
-
-    def generate_bid_ask_spread(self, current_time, do_pruning=True, add_noise=True):
+    def generate_bid_ask_spread(self, current_price, current_volatility, current_time, do_pruning=True, add_noise=True):
         '''
         An agent would have some valuation from its highest-activated memory
         It would then say "I am willing to buy the asset below this price or
@@ -155,13 +188,13 @@ class Agent:
         
         total_activations = {}
         base_activations = {} # Create a separate dictionary for pruning
-        for price, timestamp_list in self.memory.items():
+        for bin_id, timestamp_list in self.memory.items():
             b_i = self._get_base_level_activation(timestamp_list, current_time)
             noise = np.random.logistic(loc=0.0, scale=1.0)
             a_i = b_i + noise if add_noise else b_i
 
-            base_activations[price] = b_i
-            total_activations[price] = a_i
+            base_activations[bin_id] = b_i
+            total_activations[bin_id] = a_i
         
         if do_pruning:
             self._do_prune_memory(base_activations, total_activations)
@@ -170,10 +203,11 @@ class Agent:
             if not self.memory: 
                 return None
 
-        retrieved_value = max(total_activations, key=total_activations.get)
-
-        bid_price = retrieved_value * (1 - (0.5 * self.spread_pct / 100))
-        ask_price = retrieved_value * (1 + (0.5 * self.spread_pct / 100))
+        retrieved_bin = max(total_activations, key=total_activations.get)
+        r_retrieved = self._get_representative_return(retrieved_bin, current_volatility)
+        expected_value = current_price * (1.0 + r_retrieved)
+        bid_price = expected_value * (1 - (0.5 * self.spread_pct / 100))
+        ask_price = expected_value * (1 + (0.5 * self.spread_pct / 100))
 
         return {
             'agent_id': self.agent_id,
