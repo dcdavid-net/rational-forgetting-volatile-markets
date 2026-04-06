@@ -32,7 +32,7 @@ class Agent:
         else:
             return 5
 
-    def _get_representative_return(self, bin_id, current_volatility):
+    def _get_representative_return(self, bin_id):
         z_centers = {
             1: -2.5,  # Extreme negative/left tail
             2: -1.25, # Moderate negative center
@@ -40,7 +40,16 @@ class Agent:
             4: 1.25,  # Moderate positive center
             5: 2.5    # Extreme positive/right tail
         }
-        return z_centers[bin_id] * current_volatility
+        
+        # Calculate the historical volatility of this specific memory chunk, not the current volatility
+        memory_tuples = self.memory.get(bin_id, [])
+        if not memory_tuples:
+            return 0.0
+            
+        historical_vols = [volatility for _, volatility in memory_tuples]
+        avg_historical_vol = sum(historical_vols) / len(historical_vols)
+        
+        return z_centers[bin_id] * avg_historical_vol
 
     def observe_return(self, current_return, current_volatility, current_time):
         if current_volatility == 0.0:
@@ -52,15 +61,29 @@ class Agent:
 
         if bin_id not in self.memory:
             self.memory[bin_id] = []
-        self.memory[bin_id].append(current_time)
+        self.memory[bin_id].append((current_time, current_volatility)) # (timestamp, volatility_context) tuples
 
     # def observe_price(self, price, current_time):
     #     if price not in self.memory:
     #         self.memory[price] = []
     #     self.memory[price].append(current_time)
 
+    def _get_contextual_similarity(self, memory_tuples, current_volatility):
+        if not memory_tuples:
+            return float('-inf')
+            
+        historical_vols = [volatility for _, volatility in memory_tuples]
+        avg_historical_vol = sum(historical_vols) / len(historical_vols)
+        
+        # so that an 80% drop in volatility yields a massive 0.8 mismatch
+        relative_mismatch = abs(current_volatility - avg_historical_vol) / avg_historical_vol
+        penalty_scale = 5.0 # scaling the penalty so it can mathematically neutralize the B_i advantage
+        mismatch_penalty = -relative_mismatch * penalty_scale
+        
+        return mismatch_penalty
+
     def _get_base_level_activation(self, timestamp_list, current_time):
-        '''
+        r'''
         CALCULATE BASE-LEVEL ACTIVATION
         $$B_i = \ln \left( \sum_{k=1}^{n} t_k^{-d} \right)$$
         '''
@@ -87,7 +110,7 @@ class Agent:
             del self.memory[bin_id] # delete from memory
             del total_activations[bin_id] # delete from the temporary retrieval memory too
 
-    def generate_bid_ask_spread(self, current_price, current_volatility, current_time, do_pruning=True, add_noise=True):
+    def generate_bid_ask_spread(self, current_price, current_volatility, current_time, true_value=None, do_pruning=True, add_noise=True):
         '''
         An agent would have some valuation from its highest-activated memory
         It would then say "I am willing to buy the asset below this price or
@@ -97,13 +120,18 @@ class Agent:
         '''
         if not self.memory:
             return None
+
+        context_weight = 1.0 
         
         total_activations = {}
         base_activations = {} # Create a separate dictionary for pruning
-        for bin_id, timestamp_list in self.memory.items():
+        for bin_id, memory_tuples in self.memory.items():
+            timestamp_list = [timestamp for timestamp, _ in memory_tuples]
+            s_context = self._get_contextual_similarity(memory_tuples, current_volatility)
+
             b_i = self._get_base_level_activation(timestamp_list, current_time)
-            noise = np.random.logistic(loc=0.0, scale=1.0)
-            a_i = b_i + noise if add_noise else b_i
+            noise = np.random.logistic(loc=0.0, scale=1.0) if add_noise else 0.0
+            a_i = b_i + (context_weight * s_context) + noise
 
             base_activations[bin_id] = b_i
             total_activations[bin_id] = a_i
@@ -116,13 +144,15 @@ class Agent:
                 return None
 
         retrieved_bin = max(total_activations, key=total_activations.get)
-        r_retrieved = self._get_representative_return(retrieved_bin, current_volatility)
+        r_retrieved = self._get_representative_return(retrieved_bin)
         expected_value = current_price * (1.0 + r_retrieved)
-        bid_price = expected_value * (1 - (0.5 * self.spread_pct / 100))
-        ask_price = expected_value * (1 + (0.5 * self.spread_pct / 100))
+        dynamic_spread = self.spread_pct * current_volatility 
+        
+        bid_price = expected_value * (1 - (0.5 * dynamic_spread))
+        ask_price = expected_value * (1 + (0.5 * dynamic_spread))
 
         return {
             'agent_id': self.agent_id,
-            'bid': round(bid_price, 2),
-            'ask': round(ask_price, 2)
+            'bid': bid_price,
+            'ask': ask_price
         }
