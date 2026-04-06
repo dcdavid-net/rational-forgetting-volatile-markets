@@ -11,5 +11,5 @@ imperfect information about future payoffs.
 '''
 def generate_fundamental_value(steps=2000, start_price=100, volatility=1.0):
     shocks = np.random.normal(loc=0, scale=volatility, size=steps)
-    price_path = start_price + np.cumsum(shocks)
+    price_path = start_price * np.exp(np.cumsum(shocks))
     return price_path
