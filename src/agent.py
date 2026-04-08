@@ -16,6 +16,9 @@ class Agent:
         self.spread_pct = spread
 
         self.memory = {}
+
+        self.cash = 10000.0
+        self.shares = 100
     
     def __repr__(self):
         return f"Agent({self.agent_id}, decay_rate={self.d}, prune_threshold={self.prune_threshold}, spread={self.spread_pct})"
@@ -148,11 +151,8 @@ class Agent:
         expected_value = current_price * (1.0 + r_retrieved)
         dynamic_spread = self.spread_pct * current_volatility 
         
-        bid_price = expected_value * (1 - (0.5 * dynamic_spread))
-        ask_price = expected_value * (1 + (0.5 * dynamic_spread))
+        orders = {'agent_id': self.agent_id}
+        orders['bid'] = expected_value * (1 - (0.5 * dynamic_spread)) if self.cash >= bid_price else None
+        orders['ask'] = expected_value * (1 + (0.5 * dynamic_spread)) if self.shares > 0 else None
 
-        return {
-            'agent_id': self.agent_id,
-            'bid': bid_price,
-            'ask': ask_price
-        }
+        return orders if len(orders) > 1 else None
