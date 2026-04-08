@@ -2,7 +2,7 @@ class ValueAgent:
     def __init__(self, agent_id, spread=5.0):
         self.agent_id = agent_id
         self.spread_pct = spread
-        self.cash = 10000.0
+        self.cash = 1000000.0
         self.shares = 100
         
     def observe_return(self, *args):

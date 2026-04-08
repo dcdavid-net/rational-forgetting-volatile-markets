@@ -17,7 +17,7 @@ class Agent:
 
         self.memory = {}
 
-        self.cash = 10000.0
+        self.cash = 1000000.0
         self.shares = 100
     
     def __repr__(self):
