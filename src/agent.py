@@ -17,7 +17,7 @@ class Agent:
 
         self.memory = {}
 
-        self.cash = 1000000.0
+        self.cash = 10000.0
         self.shares = 100
     
     def __repr__(self):
@@ -80,7 +80,7 @@ class Agent:
         
         # so that an 80% drop in volatility yields a massive 0.8 mismatch
         relative_mismatch = abs(current_volatility - avg_historical_vol) / avg_historical_vol
-        penalty_scale = 5.0 # scaling the penalty so it can mathematically neutralize the B_i advantage
+        penalty_scale = 300.0 # scaling the penalty so it can mathematically neutralize the B_i advantage
         mismatch_penalty = -relative_mismatch * penalty_scale
         
         return mismatch_penalty
@@ -133,7 +133,8 @@ class Agent:
             s_context = self._get_contextual_similarity(memory_tuples, current_volatility)
 
             b_i = self._get_base_level_activation(timestamp_list, current_time)
-            noise = np.random.logistic(loc=0.0, scale=1.0) if add_noise else 0.0
+            dynamic_scale = 1.0 + (10.0 * current_volatility)
+            noise = np.random.logistic(loc=0.0, scale=dynamic_scale) if add_noise else 0.0
             a_i = b_i + (context_weight * s_context) + noise
 
             base_activations[bin_id] = b_i
@@ -148,12 +149,24 @@ class Agent:
 
         retrieved_bin = max(total_activations, key=total_activations.get)
         r_retrieved = self._get_representative_return(retrieved_bin)
-        expected_value = current_price * (1.0 + r_retrieved)
+        expected_value = current_price * (1.0 + r_retrieved) # geometric price determination to match geometric fundamentals
         dynamic_spread = self.spread_pct * current_volatility 
         
+        spend_ratio = 0.10 # use 10% of available capital/shares per order
         orders = {'agent_id': self.agent_id}
-        bid_price = expected_value * (1 - (0.5 * dynamic_spread))
-        orders['bid'] = bid_price if self.cash >= bid_price else None
-        orders['ask'] = expected_value * (1 + (0.5 * dynamic_spread)) if self.shares > 0 else None
+        
+        if expected_value >= current_price: # directional trading: buy if agent thinks asset is underpriced, sell if overpriced
+            bid_price = expected_value * (1 - (0.5 * dynamic_spread))
+            volume = int((self.cash * spend_ratio) / bid_price)
+            if volume > 0:
+                orders['bid'] = bid_price
+                orders['bid_volume'] = volume
+                
+        elif expected_value < current_price:
+            ask_price = expected_value * (1 + (0.5 * dynamic_spread))
+            volume = int(self.shares * spend_ratio)
+            if volume > 0:
+                orders['ask'] = ask_price
+                orders['ask_volume'] = volume
 
         return orders if len(orders) > 1 else None
