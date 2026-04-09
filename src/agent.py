@@ -152,9 +152,14 @@ class Agent:
         expected_value = current_price * (1.0 + r_retrieved) # geometric price determination to match geometric fundamentals
         dynamic_spread = self.spread_pct * current_volatility 
         
-        spend_ratio = 0.10 # use 10% of available capital/shares per order
+        spend_ratio = 0.05 # use 5% of available capital/shares per order
         orders = {'agent_id': self.agent_id}
-        
+
+        # Cash + Value of holdings to determine shorting ability / margin for the account
+        equity = self.cash + (self.shares * current_price)
+        if equity <= 0: # agent is bankrupt, they cannot trade
+            return None
+
         if expected_value >= current_price: # directional trading: buy if agent thinks asset is underpriced, sell if overpriced
             bid_price = expected_value * (1 - (0.5 * dynamic_spread))
             volume = int((self.cash * spend_ratio) / bid_price)
@@ -164,7 +169,7 @@ class Agent:
                 
         elif expected_value < current_price:
             ask_price = expected_value * (1 + (0.5 * dynamic_spread))
-            volume = int(self.shares * spend_ratio)
+            volume = int(max(equity / current_price, 0) * spend_ratio) # enable shorting based on margin / equity
             if volume > 0:
                 orders['ask'] = ask_price
                 orders['ask_volume'] = volume
