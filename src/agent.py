@@ -160,16 +160,30 @@ class Agent:
         if equity <= 0: # agent is bankrupt, they cannot trade
             return None
 
+        market_price = max(current_price, 0.01) # tick size of the market. Price can never truly be 0.0
         if expected_value >= current_price: # directional trading: buy if agent thinks asset is underpriced, sell if overpriced
-            bid_price = expected_value * (1 - (0.5 * dynamic_spread))
-            volume = int((self.cash * spend_ratio) / bid_price)
+            # agents in the stock market put bids/asks based on what the market price is not necessarily what they think is fair. 
+            # Example: stock price = 100. If agent thinks the stock price should be at 200, they dont just place a bid at 200.
+            #          Instead, they should bid at 100 (market price) so that they have money to gain on the way up.
+            bid_price = current_price * (1 + (0.5 * dynamic_spread))
+            target_volume = int((self.cash * spend_ratio) / market_price) # size the order based on market price
+            max_affordable = int(self.cash / bid_price) if bid_price > 0 else 0 # ensure agent can actually afford its bid/ask
+            volume = min(target_volume, max_affordable)
+            
             if volume > 0:
                 orders['bid'] = bid_price
                 orders['bid_volume'] = volume
                 
         elif expected_value < current_price:
-            ask_price = expected_value * (1 + (0.5 * dynamic_spread))
-            volume = int(max(equity / current_price, 0) * spend_ratio) # enable shorting based on margin / equity
+            ask_price = current_price * (1 - (0.5 * dynamic_spread))
+            
+            # FINRA Rule 4210
+            # low-priced stocks is $2.50 per share on margin
+            margin_per_share = max(market_price, 2.50)
+            target_volume = int((equity * spend_ratio) / margin_per_share)
+            max_short = int(equity / margin_per_share)
+            volume = min(target_volume, max_short)
+            
             if volume > 0:
                 orders['ask'] = ask_price
                 orders['ask_volume'] = volume
