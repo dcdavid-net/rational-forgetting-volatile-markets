@@ -1,7 +1,9 @@
+import numpy as np
+
 class ValueAgent:
     def __init__(self, agent_id, spread=5.0):
         self.agent_id = agent_id
-        self.spread_pct = spread
+        self.spread_pct = spread * max(0.5, np.random.normal(loc=2.0, scale=0.5))
         self.cash = 10000.0
         self.shares = 300
         
@@ -18,13 +20,17 @@ class ValueAgent:
         if equity <= 0: # agent is bankrupt, they cannot trade
             return None
 
+        perceived_value = true_value * np.random.normal(loc=1.0, scale=0.02) # add some randomness just like in real life. Nobody perfectly values an asset.
         market_price = max(current_price, 0.01) # tick size of the market. Price can never truly be 0.0
-        if true_value >= current_price: # directional trading: buy if agent thinks asset is underpriced, sell if overpriced
+        if perceived_value >= current_price: # directional trading: buy if agent thinks asset is underpriced, sell if overpriced
+            bid_price = perceived_value * (1 - (0.5 * dynamic_spread))
+            
             # agents in the stock market put bids/asks based on what the market price is not necessarily what they think is fair. 
             # Example: stock price = 100. If agent thinks the stock price should be at 200, they dont just place a bid at 200.
             #          Instead, they should bid at 100 (market price) so that they have money to gain on the way up.
-            bid_price = current_price * (1 + (0.5 * dynamic_spread))
-            target_volume = int((self.cash * spend_ratio) / market_price) # size the order based on market price
+            # target_volume = int((self.cash * spend_ratio) / market_price)
+            target_volume = int((equity * spend_ratio) / market_price)
+
             max_affordable = int(self.cash / bid_price) if bid_price > 0 else 0 # ensure agent can actually afford its bid/ask
             volume = min(target_volume, max_affordable)
             
@@ -32,8 +38,8 @@ class ValueAgent:
                 orders['bid'] = bid_price
                 orders['bid_volume'] = volume
                 
-        elif true_value < current_price:
-            ask_price = current_price * (1 - (0.5 * dynamic_spread))
+        elif perceived_value < current_price:
+            ask_price = perceived_value * (1 + (0.5 * dynamic_spread))
             
             # FINRA Rule 4210
             # low-priced stocks is $2.50 per share on margin
