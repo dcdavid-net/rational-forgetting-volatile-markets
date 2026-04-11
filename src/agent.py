@@ -13,7 +13,7 @@ class Agent:
         spread_pct static for now. TODO: in Phase 2, may have to make this variable
         defaulting to 2.0 so that we functionally do spreads of ± 1 percent
         '''
-        self.spread_pct = spread
+        self.spread_pct = spread * max(0.5, np.random.normal(loc=2.0, scale=0.5))
 
         self.memory = {}
 
@@ -80,7 +80,7 @@ class Agent:
         
         # so that an 80% drop in volatility yields a massive 0.8 mismatch
         relative_mismatch = abs(current_volatility - avg_historical_vol) / avg_historical_vol
-        penalty_scale = 300.0 # scaling the penalty so it can mathematically neutralize the B_i advantage
+        penalty_scale = 110.0 # scaling the penalty so it can mathematically neutralize the B_i advantage
         mismatch_penalty = -relative_mismatch * penalty_scale
         
         return mismatch_penalty
@@ -162,11 +162,14 @@ class Agent:
 
         market_price = max(current_price, 0.01) # tick size of the market. Price can never truly be 0.0
         if expected_value >= current_price: # directional trading: buy if agent thinks asset is underpriced, sell if overpriced
+            bid_price = expected_value * (1 - (0.5 * dynamic_spread))
+            
             # agents in the stock market put bids/asks based on what the market price is not necessarily what they think is fair. 
             # Example: stock price = 100. If agent thinks the stock price should be at 200, they dont just place a bid at 200.
             #          Instead, they should bid at 100 (market price) so that they have money to gain on the way up.
-            bid_price = current_price * (1 + (0.5 * dynamic_spread))
-            target_volume = int((self.cash * spend_ratio) / market_price) # size the order based on market price
+            # target_volume = int((self.cash * spend_ratio) / market_price)
+            target_volume = int((equity * spend_ratio) / market_price)
+
             max_affordable = int(self.cash / bid_price) if bid_price > 0 else 0 # ensure agent can actually afford its bid/ask
             volume = min(target_volume, max_affordable)
             
@@ -175,7 +178,7 @@ class Agent:
                 orders['bid_volume'] = volume
                 
         elif expected_value < current_price:
-            ask_price = current_price * (1 - (0.5 * dynamic_spread))
+            ask_price = expected_value * (1 + (0.5 * dynamic_spread))
             
             # FINRA Rule 4210
             # low-priced stocks is $2.50 per share on margin
