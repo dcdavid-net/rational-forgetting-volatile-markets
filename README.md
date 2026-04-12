@@ -1,36 +1,29 @@
 # Developer Notes for working with this Repo
 
-Directory Tree (including Local Files)
-rational-forgetting-volatile-markets/
-├── academic_sources/
-│   ├── ACT-R Manual.pdf
-│   ├── Anderson -- Integrated Theory of Mind.pdf
-│   ├── Anderson -- Is human cognition adaptive.pdf
-│   ├── Anderson -- The Atomic Components of Thought.pdf
-│   ├── Gonzalez -- Instance-based Learning in Dynamic Decision Making.pdf
-│   ├── Jiang -- Investor Memory and Biased Beliefs Evidence from the Field.pdf
-│   ├── Lieder -- Resource-rational analysis Understanding human cognition as the optimal use of.pdf
-│   ├── Malmendier -- Depression Babies Do Macroeconomic Experiences Affect Risk-Taking.pdf
-│   ├── RiskMetrics Technical Document.pdf
-│   └── Welch -- A Heuristic for Fat-Tailed Stock Market Returns.pdf
-├── data/
-│   └── sp500_historical_returns.csv
-├── notebooks/ 
-├── src/
-│   ├── agent.py
-│   ├── calibrate_pruning.py
-│   ├── fetch_sp500.py
-│   ├── generator.py
-│   ├── market.py
-│   └── tester.py
-├── .gitignore
-├── main.py
-├── outputs.txt
-├── planning.csv
-├── README.md
-├── requirements.txt
-├── THEORY.md
-└── TODO.md
+- src/agent.py is the IBL Agent class
+
+- src/calibrate_pruning.py generates -2.29 as the pruning threshold for my report
+
+- src/fetch_sp500.py generates
+  - sp500_historical_returns.csv
+
+- src/generator.py generates a Geometric random walk for main.py
+
+- market.py is the Market class
+
+- tester.py tests most of my scripts and generates outputs.txt
+
+- src/tester.py generates
+  - outputs.txt
+
+- src/value_agent.py is the Value Agent Class
+
+- main.py generates
+  - Baseline vs Treatment.png
+  - Fat_Tails_Histogram.png
+  - Volatility_Clustering.png
+  - main_output.txt (through the command line, and those results are copy pasted to this txt file)
+  - data/main_run_0_results.csv
 
 Initial Setup
 ```
