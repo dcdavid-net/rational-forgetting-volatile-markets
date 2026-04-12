@@ -183,9 +183,17 @@ class Agent:
             # FINRA Rule 4210
             # low-priced stocks is $2.50 per share on margin
             margin_per_share = max(market_price, 2.50)
-            target_volume = int((equity * spend_ratio) / margin_per_share)
-            max_short = int(equity / margin_per_share)
-            volume = min(target_volume, max_short)
+            
+            # Do not count equity from shorting as equity
+            existing_shorts = max(0, -self.shares)
+            margin_tied_up = existing_shorts * margin_per_share
+            free_equity = equity - margin_tied_up
+            if free_equity > 0:
+                target_volume = int((free_equity * spend_ratio) / margin_per_share)
+                max_short = int(free_equity / margin_per_share)
+                volume = min(target_volume, max_short)
+            else:
+                volume = 0
             
             if volume > 0:
                 orders['ask'] = ask_price
