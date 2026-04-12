@@ -80,7 +80,7 @@ class Agent:
         
         # so that an 80% drop in volatility yields a massive 0.8 mismatch
         relative_mismatch = abs(current_volatility - avg_historical_vol) / avg_historical_vol
-        penalty_scale = 110.0 # scaling the penalty so it can mathematically neutralize the B_i advantage
+        penalty_scale = 5.5 # scaling the penalty so it can mathematically neutralize the B_i advantage
         mismatch_penalty = -relative_mismatch * penalty_scale
         
         return mismatch_penalty
@@ -133,7 +133,7 @@ class Agent:
             s_context = self._get_contextual_similarity(memory_tuples, current_volatility)
 
             b_i = self._get_base_level_activation(timestamp_list, current_time)
-            dynamic_scale = 1.0 + (10.0 * current_volatility)
+            dynamic_scale = 1.5 + (10.0 * current_volatility)
             noise = np.random.logistic(loc=0.0, scale=dynamic_scale) if add_noise else 0.0
             a_i = b_i + (context_weight * s_context) + noise
 
@@ -152,7 +152,7 @@ class Agent:
         expected_value = current_price * (1.0 + r_retrieved) # geometric price determination to match geometric fundamentals
         dynamic_spread = self.spread_pct * current_volatility 
         
-        spend_ratio = 0.05 # use 5% of available capital/shares per order
+        spend_ratio = 0.01 # use 1% of available capital/shares per order
         orders = {'agent_id': self.agent_id}
 
         # Cash + Value of holdings to determine shorting ability / margin for the account

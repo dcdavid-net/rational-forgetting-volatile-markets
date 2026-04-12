@@ -12,7 +12,7 @@ class ValueAgent:
         
     def generate_bid_ask_spread(self, current_price, current_volatility, current_time, true_value, **kwargs):
         dynamic_spread = self.spread_pct * current_volatility
-        spend_ratio = 0.05 # use 5% of available capital/shares per order
+        spend_ratio = 0.01 # use 1% of available capital/shares per order
         orders = {'agent_id': self.agent_id}
 
         # Cash + Value of holdings to determine shorting ability / margin for the account
