@@ -1,0 +1,156 @@
+$ python main.py
+Starting Monte Carlo Simulation...
+Iterations: 100
+Parallel Workers: 18
+
+[1/100] Completed Run ID: 6
+[2/100] Completed Run ID: 7
+[3/100] Completed Run ID: 3
+[4/100] Completed Run ID: 14
+[5/100] Completed Run ID: 15
+[6/100] Completed Run ID: 13
+[7/100] Completed Run ID: 5
+[8/100] Completed Run ID: 8
+[9/100] Completed Run ID: 11
+[10/100] Completed Run ID: 16
+[11/100] Completed Run ID: 12
+[12/100] Completed Run ID: 2
+[13/100] Completed Run ID: 4
+[14/100] Completed Run ID: 10
+[15/100] Completed Run ID: 1
+[16/100] Completed Run ID: 9
+[17/100] Completed Run ID: 17
+[18/100] Completed Run ID: 0
+[19/100] Completed Run ID: 25
+[20/100] Completed Run ID: 18
+[21/100] Completed Run ID: 24
+[22/100] Completed Run ID: 23
+[23/100] Completed Run ID: 21
+[24/100] Completed Run ID: 20
+[25/100] Completed Run ID: 19
+[26/100] Completed Run ID: 32
+[27/100] Completed Run ID: 22
+[28/100] Completed Run ID: 27
+[29/100] Completed Run ID: 26
+[30/100] Completed Run ID: 30
+[31/100] Completed Run ID: 28
+[32/100] Completed Run ID: 33
+[33/100] Completed Run ID: 31
+[34/100] Completed Run ID: 34
+[35/100] Completed Run ID: 29
+[36/100] Completed Run ID: 35
+[37/100] Completed Run ID: 36
+[38/100] Completed Run ID: 38
+[39/100] Completed Run ID: 37
+[40/100] Completed Run ID: 42
+[41/100] Completed Run ID: 39
+[42/100] Completed Run ID: 41
+[43/100] Completed Run ID: 40
+[44/100] Completed Run ID: 43
+[45/100] Completed Run ID: 45
+[46/100] Completed Run ID: 46
+[47/100] Completed Run ID: 44
+[48/100] Completed Run ID: 50
+[49/100] Completed Run ID: 52
+[50/100] Completed Run ID: 51
+[51/100] Completed Run ID: 49
+[52/100] Completed Run ID: 53
+[53/100] Completed Run ID: 47
+[54/100] Completed Run ID: 48
+[55/100] Completed Run ID: 54
+[56/100] Completed Run ID: 56
+[57/100] Completed Run ID: 55
+[58/100] Completed Run ID: 60
+[59/100] Completed Run ID: 57
+[60/100] Completed Run ID: 62
+[61/100] Completed Run ID: 59
+[62/100] Completed Run ID: 58
+[63/100] Completed Run ID: 61
+[64/100] Completed Run ID: 65
+[65/100] Completed Run ID: 66
+[66/100] Completed Run ID: 69
+[67/100] Completed Run ID: 64
+[68/100] Completed Run ID: 63
+[69/100] Completed Run ID: 68
+[70/100] Completed Run ID: 71
+[71/100] Completed Run ID: 70
+[72/100] Completed Run ID: 67
+[73/100] Completed Run ID: 72
+[74/100] Completed Run ID: 76
+[75/100] Completed Run ID: 74
+[76/100] Completed Run ID: 73
+[77/100] Completed Run ID: 77
+[78/100] Completed Run ID: 79
+[79/100] Completed Run ID: 78
+[80/100] Completed Run ID: 80
+[81/100] Completed Run ID: 81
+[82/100] Completed Run ID: 75
+[83/100] Completed Run ID: 84
+[84/100] Completed Run ID: 82
+[85/100] Completed Run ID: 85
+[86/100] Completed Run ID: 86
+[87/100] Completed Run ID: 83
+[88/100] Completed Run ID: 87
+[89/100] Completed Run ID: 89
+[90/100] Completed Run ID: 88
+[91/100] Completed Run ID: 90
+[92/100] Completed Run ID: 91
+[93/100] Completed Run ID: 92
+[94/100] Completed Run ID: 93
+[95/100] Completed Run ID: 95
+[96/100] Completed Run ID: 96
+[97/100] Completed Run ID: 94
+[98/100] Completed Run ID: 97
+[99/100] Completed Run ID: 98
+[100/100] Completed Run ID: 99
+########### FINAL MONTE CARLO METRICS (N=100 Runs) ############
+95% Confidence Interval
+Fundamental:
+  Fisher Kurtosis : -0.0048  [-0.1390, 0.1250]
+  Abs Returns AC  : 0.0008  [-0.0228, 0.0247]
+
+Val_Benchmark:
+  Fisher Kurtosis : 0.3306  [0.1385, 0.5499]
+  Abs Returns AC  : 0.2777  [0.2559, 0.3097]
+
+Behavioral_Control:
+  Fisher Kurtosis : 2.4505  [0.4103, 8.4674]
+  Abs Returns AC  : 0.0168  [-0.0339, 0.1140]
+
+Treatment:
+  Fisher Kurtosis : 2.3270  [0.1115, 7.4895]
+  Abs Returns AC  : 0.0208  [-0.0386, 0.1152]
+
+---------------------------------------------------------------
+METRIC 4: LIMITS TO ARBITRAGE (WEALTH DISTRIBUTION)
+Average Final IBL Net Worth (Treatment) : $9,163,841.45
+Average Final VAL Net Worth (Treatment) : $-2,266,745.39
+---------------------------------------------------------------
+METRIC 1: MAX DEVIATION FROM FUNDAMENTAL (BUBBLE SIZE)
+Behavioral Control (d=0.0) Avg Max Dev : 38.55x
+Experimental Treatment (d=0.5) Avg Max Dev: 32.72x
+---------------------------------------------------------------
+HYPOTHESIS TESTING: DOES BIOLOGICAL DECAY CAUSE CRASHES?
+Mann-Whitney U Statistic : 4713.0
+P-Value                  : 0.758808
+
+CONCLUSION: NOT STATISTICALLY SIGNIFICANT (p >= 0.05)
+Fail to reject the null hypothesis. There is not enough evidence to prove
+that the decay rate caused a statistically significant increase in market fat-tails.
+---------------------------------------------------------------
+HYPOTHESIS TESTING: DOES BIOLOGICAL DECAY CAUSE VOLATILITY CLUSTERING?
+Mann-Whitney U Statistic : 5455.0
+P-Value                  : 0.133387
+
+CONCLUSION: NOT STATISTICALLY SIGNIFICANT (p >= 0.05)
+Fail to reject the null hypothesis. There is not enough evidence to prove
+that the decay rate caused an increase in volatility clustering.
+---------------------------------------------------------------
+Saving representative paths (Run ID 0) to data/main_run_0_results.csv...
+
+METRIC 2: Activation States --- to explain bubble
+At peak bubble (t=9997), Agent 0's internal memory state:
+Current Volatility: 0.017756
+Bin 5 (Extreme Positive) - Base Act (B_i): 1.55 | Context Penalty (S_ctx): -0.26 | Total Expected: 1.30
+Bin 1 (Extreme Negative) - Base Act (B_i): 1.65 | Context Penalty (S_ctx): -0.45 | Total Expected: 1.20
+===========================================
