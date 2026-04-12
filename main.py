@@ -121,7 +121,7 @@ def run_simulation(num_agents=50, total_steps=5000, burn_in=5000, decay_rate=0.5
         if verbose and t % 500 == 0:
             print(f'[Run {run_id}] Step {t}: Price = {current_price:.2f}, Volatility = {current_volatility:.4f}')
         
-        if t == 10000 and run_id == 0:
+        # if t == 10000 and run_id == 0:
             # ibl_cash = sum(a.cash for a in agents if isinstance(a, Agent))
             # val_cash = sum(a.cash for a in agents if isinstance(a, ValueAgent))
             # ibl_shares = sum(a.shares for a in agents if isinstance(a, Agent))
@@ -129,8 +129,8 @@ def run_simulation(num_agents=50, total_steps=5000, burn_in=5000, decay_rate=0.5
             # print(f"IBL Total Cash: ${ibl_cash:.2f} | Shares: {ibl_shares} | Net Worth: {ibl_cash + (ibl_shares*current_price)}")
             # print(f"VAL Total Cash: ${val_cash:.2f} | Shares: {val_shares} | Net Worth: {val_cash + (val_shares*current_price)}")
 
-            kurt, acar = calculate_metrics(price_history)
-            print(f"Running Kurtosis and ACAR: {kurt:.4f} {acar:.4f}")
+            # kurt, acar = calculate_metrics(price_history)
+            # print(f"Running Kurtosis and ACAR: {kurt:.4f} {acar:.4f}")
 
     return price_history, V_t[burn_in + 1:]
 
